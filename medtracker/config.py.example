@@ -1,0 +1,4 @@
+# examples for how to set up a config file
+
+sqlalchemy_db = "sqlite:///..."
+flask_secret_key = "some_secret_key"
