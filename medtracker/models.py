@@ -93,7 +93,7 @@ class food_nutrient_data(db.Model):
                                                         self.nutr_value)
 
 class User(db.Model):
-    """A user capable of listening to voicemails"""
+    """A user capable of eating foods"""
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -124,3 +124,22 @@ class User(db.Model):
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
+
+""" 
+# MORE TODO 10/19/18
+
+class FoodHistory(db.Model):
+    ##TODO
+
+class Symptoms(db.Model):
+    ##TODO
+
+class SymptomHistory(db.Model):
+    ##TODO
+
+class Medications(db.Model):
+    ##TODO
+
+class MedicationHistory(db.Model):
+    ##TODO
+"""
