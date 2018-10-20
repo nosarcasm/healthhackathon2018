@@ -9,12 +9,31 @@ import flask_login
 from flask_login import login_user, logout_user, current_user
 
 @app.route("/")
-def index():
+def splash_page():
     return send_from_directory("/app/assets/","splash-page/index.html")
+
+@flask_login.login_required
+@app.route("/home")
+def index():
+    return render_template("index.html")
 
 @app.route('/assets/<path:path>')
 def send_js(path):
     return send_from_directory('/app/assets', path)
+
+@flask_login.login_required
+@app.route("/foods")
+def foods_index():
+	foods = Foods.query.all()[0:100]
+	for f in foods:
+		f.carbs = f.nutrient_data.filter_by(nutr_id='205').first().nutr_value
+	return render_template("foods.html",foods=foods)
+
+@flask_login.login_required
+@app.route("/nutrients")
+def nutrients_index():
+	nutrients = Nutrients.query
+	return render_template("nutrients.html",nutrients=nutrients)
 
 #### logins
 

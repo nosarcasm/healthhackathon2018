@@ -10,7 +10,7 @@ db = SQLAlchemy(app) #create the db object in sqlalchemy
 
 #float(f.weights.all()[1].gm_weight)/100.*float(f.nutrient_data.first().nutr_value)
 
-class foods(db.Model):
+class Foods(db.Model):
 
     __tablename__='food_desc'
 
@@ -29,13 +29,13 @@ class foods(db.Model):
     fat_factor = db.Column(db.Text)
     carb_factor = db.Column(db.Text)
 
-    weights = db.relationship("food_weights",backref="food",lazy="dynamic")
-    nutrient_data = db.relationship("food_nutrient_data",backref="food",lazy="dynamic")
+    weights = db.relationship("Food_weights",backref="food",lazy="dynamic")
+    nutrient_data = db.relationship("Food_nutrient_data",backref="food",lazy="dynamic")
 
     def __repr__(self):
         return "<Food(ndb_id='%s', long_desc='%s')"%(self.ndb_id,self.long_desc)
 
-class nutrients(db.Model):
+class Nutrients(db.Model):
     __tablename__ = 'nut_def'
 
     nutr_id = db.Column(db.Text, primary_key=True)
@@ -45,17 +45,17 @@ class nutrients(db.Model):
     num_decimal_pts = db.Column(db.Text)
     sr_order = db.Column(db.Text)
 
-    data = db.relationship("food_nutrient_data",backref="nutrient",lazy="dynamic")
+    data = db.relationship("Food_nutrient_data",backref="nutrient",lazy="dynamic")
 
     def __repr__(self):
         return "<Nutrient(nutr_id='%s', nutr_desc='%s')"%(self.nutr_id,self.nutr_desc)
 
-class food_weights(db.Model):
+class Food_weights(db.Model):
 
     __tablename__ = 'food_meas'
 
     index = db.Column(db.BigInteger, primary_key=True)
-    ndb_id = db.Column(db.Text,db.ForeignKey('food_desc.ndb_id'))
+    ndb_id = db.Column(db.Text,db.ForeignKey('food_desc.ndb_id'),index=True)
     seq = db.Column(db.Text)
     amount = db.Column(db.Text)
     measure_desc = db.Column(db.Text)
@@ -67,13 +67,13 @@ class food_weights(db.Model):
         return "<Weight(index='%s', measure_desc='%s')"%(self.index,self.measure_desc)
 
 
-class food_nutrient_data(db.Model):
+class Food_nutrient_data(db.Model):
 
     __tablename__ = 'nut_data'
 
     index = db.Column(db.BigInteger, primary_key=True)
-    ndb_id = db.Column(db.Text, db.ForeignKey('food_desc.ndb_id'))
-    nutr_id = db.Column(db.Text, db.ForeignKey('nut_def.nutr_id'))
+    ndb_id = db.Column(db.Text, db.ForeignKey('food_desc.ndb_id'),index=True)
+    nutr_id = db.Column(db.Text, db.ForeignKey('nut_def.nutr_id'),index=True)
     nutr_value = db.Column(db.Text)
     num_data_pts = db.Column(db.Text)
     std_err = db.Column(db.Text)
