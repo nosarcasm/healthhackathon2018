@@ -4,6 +4,8 @@ from medtracker import app #import init params like where the db is
 from flask_sqlalchemy import * #import sql wrapper functions from Flask web helper lib
 from sqlalchemy import orm, asc, desc #this is used to give SQLite properties to our Python classes
 
+from passlib.apps import custom_app_context as pwd_context #encrypts password
+
 db = SQLAlchemy(app) #create the db object in sqlalchemy
 
 class foods(db.Model):
@@ -87,4 +89,38 @@ class food_nutrient_data(db.Model):
     addmod_date = db.Column(db.Text)
 
     def __repr__(self):
-        return "<NutrientData(index='%s', value='%s')"%(self.index,self.nutr_value)
+        return "<NutrientData(index='%s', value='%s')"%(self.index,
+                                                        self.nutr_value)
+
+class User(db.Model):
+    """A user capable of listening to voicemails"""
+    __tablename__ = 'user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, unique=True)
+    username = db.Column(db.String, unique=True)
+    name = db.Column(db.String)
+    password_hash = db.Column(db.String(256))
+    authenticated = db.Column(db.Boolean, default=False)
+    
+    def is_active(self):
+        """True, as all users are active."""
+        return True
+
+    def get_id(self):
+        """Return the id to satisfy Flask-Login's requirements."""
+        return self.id
+
+    def is_authenticated(self):
+        """Return True if the user is authenticated."""
+        return self.authenticated
+
+    def is_anonymous(self):
+        """False, as anonymous users aren't supported."""
+        return False
+
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
