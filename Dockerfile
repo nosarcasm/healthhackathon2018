@@ -9,8 +9,12 @@ EXPOSE 5000
 
 WORKDIR /app
 ADD ./requirements.txt /app/requirements.txt
+
+RUN python -m easy_install --upgrade pyOpenSSL
+
 RUN pip install -r requirements.txt
 
 #ENTRYPOINT ["python"]
+#CMD ["bash"]
 
 CMD ["python","run.py"]
