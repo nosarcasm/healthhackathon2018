@@ -8,6 +8,8 @@ from passlib.apps import custom_app_context as pwd_context #encrypts password
 
 db = SQLAlchemy(app) #create the db object in sqlalchemy
 
+#float(f.weights.all()[1].gm_weight)/100.*float(f.nutrient_data.first().nutr_value)
+
 class foods(db.Model):
 
     __tablename__='food_desc'

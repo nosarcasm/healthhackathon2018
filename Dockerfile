@@ -1,7 +1,5 @@
 FROM python:3.6
 
-MAINTAINER Ryan Neff "raneff@gmail.com"
-
 RUN apt-get update -y
 RUN apt-get install -y build-essential vim libssl-dev
 
