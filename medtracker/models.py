@@ -125,21 +125,68 @@ class User(db.Model):
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
 
+    """TODO
+    have many foodhistory
+    have many diseasehistory
+    have many symptomhistory
+    have many medicationhistory
+    """
+
 """ 
 # MORE TODO 10/19/18
 
+## we need a way to add custom foods and allow users to specify nutrients
+
 class FoodHistory(db.Model):
     ##TODO
+    belongs_to user
+
+class Disease(db.Model):
+    ##TODO
+    have many symptoms
+    have many treatments
+    join with diseasehistory
+
+class DiseaseHistory(db.Model):
+    ##TODO
+    belongs to user
+    join with diease
+    time_dx
 
 class Symptoms(db.Model):
     ##TODO
+    belongs to many diseases
+    name
 
 class SymptomHistory(db.Model):
     ##TODO
+    belongs to patient
+    join with symptoms
+    time_had
 
 class Medications(db.Model):
     ##TODO
+    join with medicationhistory
 
 class MedicationHistory(db.Model):
     ##TODO
+    belongs to patient
+    join with medication
+    time_had
+
+class Treatments(db.Model):
+    ##TODO
+    '''named treatments for disease'''
+    has many diseases
+    treatmentdetail
+    name_of_treatment
+
+class TreatmentDetail(db.Model):
+    ##TODO
+    belongs_to treatment
+    treatment id (joins)
+    value
+    operator (<,==,>)
+    units (%, g, mg, etc.)
+
 """
