@@ -12,11 +12,11 @@
 			  <p class="card__text">{{plan.description}}</p>
 			  <div class="card__action-bar">
 			  	{% if plan.active==1 %}
-			  	<button class="card__button"><a href="/plans/deactivate/{{ plan.id }}">Deactivate</a></button>
+			  	<button class="card__button"><a href="/toggle/deactivate/{{ plan.id }}">Deactivate</a></button>
 			  	{% else %}
-			  	<button class="card__button"><a href="/plans/activate/{{ plan.id }}">Activate</a></button>
+			  	<button class="card__button"><a href="/toggle/activate/{{ plan.id }}">Activate</a></button>
 			  	{% endif %}
-				<button class="card__button"><a href="/plans/edit/{{ plan.id }}">Edit</a></button>
+				<button class="card__button"><a href="/plans/view/{{ plan.id }}">Edit</a></button>
 				<button class="card__button"><a href="/plans/delete/{{ plan.id }}" style="color:red">Delete</a></button>
 			  </div>
 			</div>		

@@ -3,7 +3,7 @@
 
 {% block body %}
 	    <div class="page-header">
-		    <h1>{{plan.title}}  <a href="/plans/edit/{{plan.id}}" class="btn btn-xs btn-primary" role="button">Edit</a></h1>
+		    <h1>{{plan.title}}</h1>
 		    <h3>{{plan.description}}</h3>
 	    </div>
 	    {% if plan.details.all()|length != 0 %}

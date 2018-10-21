@@ -228,7 +228,7 @@ def delete_plan_detail(treatdetail_id):
 	flash("Detail deleted.")
 	return redirect(url_for("plan_view",plan_id=plan_id))
 
-@app.route("/plans/<state>/<int:plan_id>")
+@app.route("/toggle/<state>/<int:plan_id>")
 @login_required
 def toggle_plan(state,plan_id):
 	plan = Treatments.query.get_or_404(plan_id)
