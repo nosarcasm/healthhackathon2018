@@ -138,6 +138,7 @@ def food_daily_log():
 	totals = calc_nutrient_totals(all_meals)
 	active_plan = current_user.treatments.filter_by(active=1).first()
 	if active_plan!=None:
+		plan_values = {d.nutrient:float(d.value) for d in active_plan.details}
 		plan_details = {d.nutrient:d.operator+d.value for d in active_plan.details}
 		indicator = {nutrient:eval(str(totals[nutrient])+plan_details[nutrient])==False for nutrient in plan_details.keys()}
 		flags = {d.nutrient:"High" if totals[d.nutrient]>float(d.value) else "Low" for d in active_plan.details}
@@ -165,7 +166,7 @@ def food_daily_log():
 	                       dinner=dinner,
 	                       snacks=snacks, totals=totals, active_plan=active_plan, plan_details=plan_details,
 	                       indicator=indicator, flags=flags,day=datetime.datetime(*[int(i) for i in day.split("-")]).strftime("%B %d, %Y"),
-	                       symptom_history=symptom_history)
+	                       symptom_history=symptom_history, plan_values=plan_values)
 @app.route("/foods/history/delete/<int:hist_id>")
 @login_required
 def delete_food_history(hist_id):

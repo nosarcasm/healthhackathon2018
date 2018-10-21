@@ -1,30 +1,34 @@
 {% extends "layout_sidebar.html" %}
 {% block title %}Foods | Demeter {% endblock %}
 {% block body %}
+		<style>
+		.symptom{
+		  	font-size: 1.5rem;
+		  	text-align: center;
+		}
+		{% for h in symptom_history %}
+		#container_{{h.id}} {
+		  margin: 20px;
+		  width: 150px;
+		  height: 100px;
+		}
+		{% endfor %}
+		</style>
 	    <div class="page-header">
 		    <h2>My plan for {{day}}</h2>
 	    </div>
 
 	    <!-- symptoms -->
 		<div class="row">
-		<div class="col-md-6">
-		<h3>Today's symptoms</h3>
+		<h3>Today's symptoms</h3><br>
 		{% if symptom_history|length != 0 %}	    
-	    <table class="table table-hover">
-		    <thead>
-			    <th>Symptom</th>
-			    <th>Value</th>
-			    <th>Actions</th>
-		    </thead>
-		   <tbody>
 		   	{% for h in symptom_history %}
-			<tr><td>{{h.symptom.name}}</td><td><input class="form-control" id="value" name="value" step="0.1" 
-				min="0" max="10" type="range" value="{{h.value}}" disabled style="max-width:100px;display: inline;height:12px">  {{h.value}} out of 10</td>
-			<td><a href="/symptoms/history/delete/{{h.id}}" class="btn btn-xs btn-danger"><i class="fas fa-minus-circle"></i></a></td>
-			</tr>
+			<div class="col-sm-2 symptom">
+				<div id="container_h_{{h.id}}">
+				</div><br>
+				{{h.symptom.name}} <a href="/symptoms/history/delete/{{h.id}}" class="btn btn-xs btn-danger"><i class="fas fa-minus-circle"></i></a>
+			</div>
 			{% endfor %}
-		   </tbody>
-	    </table>
 	    {% else %}
 	    <div class="well">
 		<div class="starter-template">
@@ -34,33 +38,118 @@
 		</div></div>
 	    {% endif %}
 		</div></div>
-		<!-- end symptoms -->
 
+		<script type="text/javascript" src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+		<script type="text/javascript">
+			// progressbar.js@1.0.0 version is used
+			// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+			{% for h in symptom_history %}
+			var bar_{{h.id}} = new ProgressBar.SemiCircle('#container_h_{{h.id}}', {
+			  strokeWidth: 6,
+			  color: '#FFEA82',
+			  trailColor: '#eee',
+			  trailWidth: 1,
+			  easing: 'easeInOut',
+			  duration: 1400,
+			  svgStyle: null,
+			  text: {
+			    value: '',
+			    alignToBottom: false
+			  },
+			  from: {color: '#FFEA82'},
+			  to: {color: '#ED6A5A'},
+			  // Set default step function for all animate calls
+			  step: (state, bar) => {
+			    bar.path.setAttribute('stroke', state.color);
+			    var value = Math.round(bar.value() * 100)/10;
+			    if (value === 0) {
+			      bar.setText('');
+			    } else {
+			      bar.setText(value);
+			    }
+
+			    bar.text.style.color = state.color;
+				  }
+				});
+			  bar_{{h.id}}.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+			  bar_{{h.id}}.text.style.fontSize = '2rem';
+			  bar_{{h.id}}.animate({{h.value|float/10}});
+			  {% endfor %}
+			</script>
+		<!-- end symptoms -->
+		<br><br>
 	    {% if active_plan!=None %}
 	    <div class="row">
 	    <div class="col-md-10">
 	    <h3>Plan progress on <a href="/plans/view/{{active_plan.id}}">{{active_plan.title}}</a></h3>
-	    <table class="table table-hover">
-		<thead>
-			<tr>
-			<th> Name </th>
-			<th> Amount </th>
-			<th> Flags </th>
-			<th> Requirement </th>
-			</tr>
-		</thead>
-		<tbody>
+	    <br>
 	    {% for key in totals %}
-	    <tr>
-	    	<td>{{key.nutr_desc}} ({{key.units}})</td>
-	    	<td>{% if indicator[key] %}<mark>{{totals[key]|round(2)}} {{key.units}}</mark>{% else %}{{totals[key]|round(2)}} {{key.units}}{%endif%}</td>
-	    	<td>{% if indicator[key] %}{{flags[key]}}{%endif%}</td>
-	    	<td>{{plan_details[key]}} {{key.units}}</td>
-	    </tr>
+		    <div class="col-sm-2 symptom">
+				<div id="container_n_{{key.nutr_id}}">
+				</div><br>
+				{{key.nutr_desc}} ({{key.units}})<br>
+				{% if indicator[key] %}<mark>{{totals[key]|round(2)}} {{key.units}}</mark>{% else %}{{totals[key]|round(2)}} {{key.units}}{%endif%}<br>
+				{% if indicator[key] %}{{flags[key]}}{%endif%}
+			</div>
 	    {% endfor %}
-			</tbody>
-		</table>
 		</div></div>
+		<script type="text/javascript">
+			// progressbar.js@1.0.0 version is used
+			// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+			{% for key in totals %}
+			var bar_{{key.nutr_id}} = new ProgressBar.SemiCircle('#container_n_{{key.nutr_id}}', {
+			  strokeWidth: 6,
+			  color: '#FFEA82',
+			  trailColor: '#eee',
+			  trailWidth: 1,
+			  easing: 'easeInOut',
+			  duration: 1400,
+			  svgStyle: null,
+			  text: {
+			    value: '',
+			    alignToBottom: false
+			  },
+			  {% if indicator[key] %} //
+			  {% if flags[key]=="Low" %} //if it is low it needs to go up
+			  from: {color: '#ED6A5A'},
+			  to: {color: '#00FF00'},
+			  {% elif flags[key]=="High" %}
+			  from: {color: '#00FF00'},
+			  to: {color: '#ED6A5A'},
+			  {% endif %}
+			  {% else %} 
+			  {% if flags[key]=="Low" %} //if it is low it's okay
+			  to: {color: '#ED6A5A'},
+			  from: {color: '#00FF00'},
+			  {% elif flags[key]=="High" %}
+			  from: {color: '#ED6A5A'},
+			  to: {color: '#00FF00'},
+			  {% endif %}
+			  {% endif %}
+			  // Set default step function for all animate calls
+			  step: (state, bar) => {
+			    bar.path.setAttribute('stroke', state.color);
+			    var value = Math.round(bar.value() * 100);
+			    if (value === 0) {
+			      bar.setText('');
+			    } else {
+			      bar.setText(value+"%");
+			    }
+
+			    bar.text.style.color = state.color;
+				  }
+				});
+			  bar_{{key.nutr_id}}.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+			  bar_{{key.nutr_id}}.text.style.fontSize = '2rem';
+			  {% set lista = [totals[key]/plan_values[key],1]|sort %}
+			  bar_{{key.nutr_id}}.animate({{lista[0]}});
+			  {% if flags[key]=="High" %}
+			  setTimeout(function(){
+			  	bar_{{key.nutr_id}}.setText("{{(totals[key]/plan_values[key]*100)|int}}%");
+			  }, 1500);
+			  {% endif %}
+			  {% endfor %}
+			</script>
 		{% endif %}
 	    <!-- Breakfast -->
 	    <div class="row">
