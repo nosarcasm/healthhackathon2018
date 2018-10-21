@@ -10,24 +10,23 @@
 		<thead>
 			<tr>
 			<th> Name </th>
-			<th> Calories </th>
-			<th> Carbs </th>
-			<th> Protein </th>
-			<th> Fats </th>
-			<th> Phenylalanine </th>
-			<th> Branched chain AAs </th>
+			{% if active_plan!=None %}
+			{% for key in plan_nutrients %}
+			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			{% endfor %}
+			{% endif %}
 			</tr>
 		</thead>
 		<tbody>
 		{% for food in foods %}
 		  <tr>
 			<td><a href="/foods/{{food.ndb_id}}/add" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a> <a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
-			<td>{{food.nutr_208}}</td>
-			<td>{{food.nutr_205}}</td>
-			<td>{{food.nutr_203}}</td>
-			<td>{{food.nutr_204}}</td>
-			<td>{{food.phe}}</td>
-			<td>{{food.bcaa}}</td>
+			{% if active_plan!=None %}
+			{% for key in plan_nutrients %}
+
+			<td>{% if food["nutr_"+key.nutr_id]!=None %}{{food["nutr_"+key.nutr_id]}}{% endif %}</td>
+			{% endfor %}
+			{% endif %}
 		  </tr>
 		{% endfor %}
 		</tbody>

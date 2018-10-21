@@ -1,10 +1,10 @@
 {% extends 'layout_sidebar.html' %}
 {% block body %}
 <div class="jumbotron">
-        <h1>Demeter</h1>
-        <p>the diet discovery app.</p>
+        <h2>Hello there, {{current_user.name}}</h2>
+        <p>Please select from one of the options in the menu.</p>
         <p>
-          <a class="btn btn-lg btn-primary" href="#" role="button">Get started &raquo;</a>
+          <a class="btn btn-lg btn-primary" href="/foods/log" role="button">My day &raquo;</a>
         </p>
       </div>
 {% endblock %}

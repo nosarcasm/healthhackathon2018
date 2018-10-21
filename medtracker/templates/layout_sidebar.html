@@ -70,31 +70,36 @@
                     <li id="user-login">
                       <a href="#" id="user-login">{{ current_user.name }} <span class="fas fa-caret-right"></span></a>
                       <ul class="nav nav-second-level">
+                        <li><a href="/profile"><span class="fas fa-briefcase-medical"></span> Medical Profile</a></li>
                         <li><a href="/logout"><span class="fas fa-sign-out-alt"></span> Log out</a></li>
                       </ul>
                     </li>
                         <li>
-                        <a href="#"><i class="fas fa-lemon"></i> My foods <span class="fas fa-caret-right"></span></a>
+                            <a href="/foods/log"><i class="fas fa-chart-area fa-fw"></i> My day</a>
+                        </li>
+                        <li>
+                            <a href="/plans"><i class="fas fa-clipboard fa-fw"></i> My meal plans</a>
+                        </li>
+                        <li>
+                        <a href="#"><i class="fas fa-lemon"></i> Log foods <span class="fas fa-caret-right"></span></a>
                             <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="/foods/log"><i class="fas fa-chart-area fa-fw"></i> My day</a>
+                                        <a href="/foods/search"><i class="fas fa-plus fa-fw"></i> Log food</a>
                                     </li>
                                     <li>
-                                        <a href="/plans"><i class="fas fa-clipboard fa-fw"></i> My meal plans</a>
+                                        <a href="/foods"><i class="fas fa-list fa-fw"></i> Browse all</a>
                                     </li>
-                                    <li>
-                                        <a href="/foods"><i class="fas fa-list fa-fw"></i> Browse foods</a>
-                                    </li>
+
                                 </ul>
                         </li>
                         <li>
                             <a href="#"><i class="fas fa-briefcase-medical"></i> My symptoms <span class="fas fa-caret-right"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="/patients/"><i class="fas fa-chart-area fa-fw"></i> Log symptom</a>
+                                        <a href="/symptoms/log"><i class="fas fa-chart-area fa-fw"></i> Log symptom</a>
                                     </li>
                                     <li>
-                                        <a href="/patients/new/"><i class="fa fa-clock"></i> History</a>
+                                        <a href="/symptoms/history"><i class="fa fa-clock"></i> History</a>
                                     </li>
                                     
                                 </ul>
@@ -103,15 +108,15 @@
                             <a href="#"><i class="fas fa-pills"></i> My medications <span class="fas fa-caret-right"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="/patients/"><i class="fa fa-chart-area fa-fw"></i> Log medication</a>
+                                        <a href="/medications/log"><i class="fa fa-chart-area fa-fw"></i> Log medication</a>
                                     </li>
                                     <li>
-                                        <a href="/patients/new/"><i class="fa fa-clock"></i> History</a>
+                                        <a href="/medications/history"><i class="fa fa-clock"></i> History</a>
                                     </li>
                                     
                                 </ul>
                         </li>
-                        <li><a href="#admin" class="inactive"><i class="fa fa-cogs"></i> Settings</a></li>
+                        <li><a href="#" class="inactive"><i class="fa fa-cogs"></i> Settings</a></li>
               </li>
                     </ul>
                 </div>

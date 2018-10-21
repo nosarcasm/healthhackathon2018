@@ -65,15 +65,26 @@ def send_js(path):
 @login_required
 def foods_index():
 	foods = Foods.query.all()
+	active_plan = current_user.treatments.filter_by(active=1).first()
+	if active_plan!=None:
+		plan_nutrients = [d.nutrient for d in active_plan.details]
+	else:
+		plan_nutrients = []
 	for f in foods:
 		f = calc_food_stats(f)
-	return render_template("foods.html",foods=foods)
+	return render_template("foods.html",foods=foods,
+	 active_plan=active_plan, plan_nutrients=plan_nutrients)
 
 @app.route("/foods/search")
 @login_required
 def foods_search():
 	search_term = request.values.get("search_term","")
 	meal = request.values.get("meal","")
+	active_plan = current_user.treatments.filter_by(active=1).first()
+	if active_plan!=None:
+		plan_nutrients = [d.nutrient for d in active_plan.details]
+	else:
+		plan_nutrients = []
 	if search_term != "":
 		foods = Foods.query.filter(Foods.long_desc.contains(search_term)).all()
 		for f in foods:
@@ -82,7 +93,8 @@ def foods_search():
 		foods = sorted(foods,key=lambda f: f.str_pos)
 	else:
 		foods = []
-	return render_template("foods_search.html",foods=foods,search_term=search_term,meal=meal)
+	return render_template("foods_search.html",foods=foods,search_term=search_term,
+	                       meal=meal, active_plan=active_plan, plan_nutrients=plan_nutrients)
 
 @app.route("/foods/<ndb_id>/add", methods=['GET', 'POST'])
 @login_required
