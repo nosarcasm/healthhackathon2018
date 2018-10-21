@@ -29,7 +29,6 @@ class NewUserForm(Form):
     name = StringField('Full Name', validators=[DataRequired()])
 
 class FoodHistoryForm(Form):				
-    '''GUI: survey build form used in views'''
     food_desc = DisabledTextField('Name')
     day = DateField('Day consumed')
     meal = SelectField('Meal', choices=[("Breakfast","Breakfast")
@@ -43,3 +42,13 @@ class FoodHistoryForm(Form):
 class PlanForm(Form):
 	title = TextField("Title")
 	description = TextField("Description")
+
+class PlanDetailForm(Form):				
+    nutr_id = QuerySelectField("Nutrient", 
+		get_pk=lambda a: a.nutr_id, get_label=lambda a: a.nutr_desc+" ("+a.units+")")
+    operator = SelectField('Criteria', choices=[("<","less than")
+                       ,("<=","less than or equal to"),
+                       ("==","equals"),
+                       (">","greater than"),
+                       (">=","greater than or equal to")])
+    value = FloatField("Value")

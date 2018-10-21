@@ -151,6 +151,33 @@ def plan_add():
 		return redirect(url_for("plan_index"))
 	return render_template("form.html",action="Add", data_type="a meal plan", form=formobj)
 
+@app.route("/plans/<int:plan_id>/add", methods=["GET", "POST"])
+@login_required
+def plan_add_treatments(plan_id):
+	plan = Treatments.query.get_or_404(plan_id)
+	formobj = PlanDetailForm()
+	formobj.nutr_id.query = Nutrients.query.all()
+	if request.method == 'POST' and formobj.validate():
+		treatmentdetail = TreatmentDetail(treatment_id = plan.id,
+									      nutr_id = formobj.nutr_id.data.nutr_id,
+									      operator = formobj.operator.data,
+									      value = formobj.value.data)
+		db.session.add(treatmentdetail)
+		db.session.commit()
+		flash("Detail added")
+		return redirect(url_for("plan_view",plan_id=plan.id))
+	return render_template("form.html",action="Add", data_type="details to "+plan.title, form=formobj)
+
+@app.route("/plan/details/delete/<int:treatdetail_id>")
+@login_required
+def delete_plan_detail(treatdetail_id):
+	detail = TreatmentDetail.query.get_or_404(treatdetail_id)
+	plan_id = detail.treatment.id
+	db.session.delete(detail)
+	db.session.commit()
+	flash("Detail deleted.")
+	return redirect(url_for("plan_view",plan_id=plan_id))
+
 @app.route("/plans/delete/<int:plan_id>")
 @login_required
 def delete_plan(plan_id):

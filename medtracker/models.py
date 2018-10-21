@@ -325,6 +325,12 @@ class TreatmentDetail(db.Model):
     operator = db.Column(db.Text)
     value = db.Column(db.Text) #will be in the units of the nutrient
 
+    def __init__(self,treatment_id = treatment_id,nutr_id = nutr_id, operator=operator,value=value):
+        self.treatment_id = treatment_id
+        self.nutr_id = nutr_id
+        self.operator = operator
+        self.value = value
+
 """ 
 # MORE TODO 10/19/18
 
