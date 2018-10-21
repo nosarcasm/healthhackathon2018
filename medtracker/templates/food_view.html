@@ -1,0 +1,25 @@
+{% extends 'layout_sidebar.html' %}
+{% block title %}{{food.long_desc}} | Demeter{% endblock %}
+
+{% block body %}
+	    <div class="page-header">
+		    <h1>{{food.long_desc}}</h1>
+		    <h3>Nutrition facts <a href="/foods/{{food.nut_id}}/edit" class="btn btn-xs btn-primary" role="button">Edit</a></h3>
+	    </div>
+	    <h4>Units</h4>
+	    
+	    <h4>Information</h4>
+	    <table class="table table-hover" id="activesort">
+		    <thead>
+		    	<th>#</th>
+			    <th>Property</th>
+			    <th>Value</th>
+		    </thead>
+		   <tbody>
+		   	{% for n in food.nutrient_data %}
+			<tr><td>{{loop.index}}</td><td>{{n.nutrient.nutr_desc}} ({{n.nutrient.units}})</td><td>{{n.nutr_value}} {{n.nutrient.units}}</td></tr>
+			{% endfor %}
+		   </tbody>
+	    </table>
+	    </div>
+{% endblock %}

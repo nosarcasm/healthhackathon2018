@@ -1,0 +1,42 @@
+{% extends "layout_sidebar.html" %}
+{% block title %}Foods | Demeter {% endblock %}
+{% block body %}
+	    <div class="page-header">
+		    <h2>All nutrients</h2>
+	    </div>
+	    
+	    <div class="row">
+	    <table class="table table-hover" id="activesort">
+		<thead>
+			<tr>
+			<th> # </th>
+			<th> Name </th>
+			<th> Units </th>
+			<th> Digits precision </th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for nutr in nutrients.all() %}
+		  <tr>
+			<td>{{nutr.nutr_id}}</td>
+			<td>{{nutr.nutr_desc}}</td>
+			<td>{{nutr.units}}</td>
+			<td>{{nutr.num_decimal_pts}}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+		</table>
+		
+	    {% if nutrients.first() == None %}
+	    <div class="well">
+		<div class="starter-template">
+		No nutrients in db.
+		<h1>:(</h1>
+		</div></div>
+	    {% else %}
+	    <div class="row" style="padding-top:20px;">
+	    </div>
+	    {% endif %}
+	    </div>
+    </div><!-- /.container -->
+{% endblock %}

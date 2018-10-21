@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}Demeter{% endblock %}</title>
+
+    <!-- Bootstrap Core CSS -->
+    
+    <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/assets/bootstrap/css/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/assets/bootstrap/css/sb-admin-2.css" rel="stylesheet">
+    <link href="/assets/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/assets/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" 
+    integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="/assets/cards/cards.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="/assets/bootstrap/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <link href="/assets/main.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/momentjs/moment.min.js"></script>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home">  
+                Demeter</a>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                    <li id="user-login">
+                      <a href="#" id="user-login">{{ current_user.name }} <span class="fas fa-caret-right"></span></a>
+                      <ul class="nav nav-second-level">
+                        <li><a href="/logout"><span class="fas fa-sign-out-alt"></span> Log out</a></li>
+                      </ul>
+                    </li>
+                        <li>
+                        <a href="#"><i class="fas fa-lemon"></i> My foods <span class="fas fa-caret-right"></span></a>
+                            <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/foods/log"><i class="fas fa-chart-area fa-fw"></i> Log food</a>
+                                    </li>
+                                    <li>
+                                        <a href="/plans"><i class="fas fa-clipboard fa-fw"></i> My meal plans</a>
+                                    </li>
+                                    <li>
+                                        <a href="/foods"><i class="fas fa-list fa-fw"></i> Browse</a>
+                                    </li>
+                                    <li>
+                                        <a href="/surveys/new/"><i class="fas fa-plus"></i> Create New</a>
+                                    </li>
+                                </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-briefcase-medical"></i> My symptoms <span class="fas fa-caret-right"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/patients/"><i class="fas fa-chart-area fa-fw"></i> Log symptom</a>
+                                    </li>
+                                    <li>
+                                        <a href="/patients/new/"><i class="fa fa-clock"></i> History</a>
+                                    </li>
+                                    
+                                </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-pills"></i> My medications <span class="fas fa-caret-right"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/patients/"><i class="fa fa-chart-area fa-fw"></i> Log medication</a>
+                                    </li>
+                                    <li>
+                                        <a href="/patients/new/"><i class="fa fa-clock"></i> History</a>
+                                    </li>
+                                    
+                                </ul>
+                        </li>
+                        <li><a href="#admin" class="inactive"><i class="fa fa-cogs"></i> Settings</a></li>
+              </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="alert alert-info" role="alert"><ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul></div>
+              {% endif %}
+            {% endwith %}
+                {%block body%}{%endblock%}
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/assets/bootstrap/js/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="/assets/bootstrap/js/sb-admin-2.js"></script>    
+    <script type="text/javascript">$(document).ready(function(){
+                 $('#activesort').DataTable();
+             });
+    </script>
+
+</body>
+
+</html>

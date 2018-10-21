@@ -1,0 +1,49 @@
+{% extends "layout_sidebar.html" %}
+{% block title %}Foods | Demeter {% endblock %}
+{% block body %}
+	    <div class="page-header">
+		    <h2>All foods <a href="/foods/new/" class="btn btn-sm btn-primary">Add new</a></h2>
+	    </div>
+	    
+	    <div class="row">
+	    <table class="table table-hover" id="activesort">
+		<thead>
+			<tr>
+			<th> Name </th>
+			<th> Calories </th>
+			<th> Carbs </th>
+			<th> Protein </th>
+			<th> Fats </th>
+			<th> Phenylalanine </th>
+			<th> Branched chain AAs </th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for food in foods %}
+		  <tr>
+			<td> <a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td>{{food.nutr_208}}</td>
+			<td>{{food.nutr_205}}</td>
+			<td>{{food.nutr_203}}</td>
+			<td>{{food.nutr_204}}</td>
+			<td>{{food.phe}}</td>
+			<td>{{food.bcaa}}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+		</table>
+		
+	    {% if foods|length == 0 %}
+	    <div class="well">
+		<div class="starter-template">
+		No foods yet.
+		<h1>:(</h1>
+		<a href="/foods/new/">How about adding a new food?</a>
+		</div></div>
+	    {% else %}
+	    <div class="row" style="padding-top:20px;">
+	    </div>
+	    {% endif %}
+	    </div>
+    </div><!-- /.container -->
+{% endblock %}
