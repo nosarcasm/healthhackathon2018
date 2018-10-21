@@ -1,0 +1,184 @@
+{% extends "layout_sidebar.html" %}
+{% block title %}Foods | Demeter {% endblock %}
+{% block body %}
+	    <div class="page-header">
+		    <h2>Food for October 21, 2018</h2>
+	    </div>
+
+	    <!-- Breakfast -->
+	    <div class="row">
+	    <h3>Breakfast <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    {% if breakfast|length != 0 %}
+	    <table class="table table-hover">
+		<thead>
+			<tr>
+			<th> Name </th>
+			<th> Amount </th>
+			<th> Calories </th>
+			<th> Carbs (g)</th>
+			<th> Protein (g)</th>
+			<th> Fats (g)</th>
+			<th> Phenylalanine (g)</th>
+			<th> Branched chain AAs (g)</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for hist in breakfast %}
+			{% set food = hist.food %}
+		  <tr>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
+			<td>{{food.nutr_208}}</td>
+			<td>{{food.nutr_205}}</td>
+			<td>{{food.nutr_203}}</td>
+			<td>{{food.nutr_204}}</td>
+			<td>{{food.phe}}</td>
+			<td>{{food.bcaa}}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+		</table>
+		
+	    {% else %}
+	    <div class="well">
+		<div class="starter-template">
+		Nothing yet
+		<h1>:(</h1>
+		<a href="/foods">How about adding a new food?</a>
+		</div></div>
+	    {% endif %}
+	    </div>
+
+	    <!-- Lunch -->
+	    <div class="row">
+	    <h3>Lunch <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    {% if lunch|length != 0 %}
+	    <table class="table table-hover">
+		<thead>
+			<tr>
+			<th> Name </th>
+			<th> Amount </th>
+			<th> Calories </th>
+			<th> Carbs (g)</th>
+			<th> Protein (g)</th>
+			<th> Fats (g)</th>
+			<th> Phenylalanine (g)</th>
+			<th> Branched chain AAs (g)</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for hist in lunch %}
+		  {% set food = hist.food %}
+		  <tr>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
+			<td>{{food.nutr_208}}</td>
+			<td>{{food.nutr_205}}</td>
+			<td>{{food.nutr_203}}</td>
+			<td>{{food.nutr_204}}</td>
+			<td>{{food.phe}}</td>
+			<td>{{food.bcaa}}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	    {% else %}
+	    <div class="well">
+		<div class="starter-template">
+		Nothing yet
+		<h1>:(</h1>
+		<a href="/foods">How about adding a new food?</a>
+		</div></div>
+	    {% endif %}
+	    </div>
+
+	    <!-- Dinner -->
+	    <div class="row">
+	    <h3>Dinner <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    {% if dinner|length != 0 %}
+	    <table class="table table-hover">
+		<thead>
+			<tr>
+			<th> Name </th>
+			<th> Amount </th>
+			<th> Calories </th>
+			<th> Carbs (g)</th>
+			<th> Protein (g)</th>
+			<th> Fats (g)</th>
+			<th> Phenylalanine (g)</th>
+			<th> Branched chain AAs (g)</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for hist in dinner %}
+		  {% set food = hist.food %}
+		  <tr>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
+			<td>{{food.nutr_208}}</td>
+			<td>{{food.nutr_205}}</td>
+			<td>{{food.nutr_203}}</td>
+			<td>{{food.nutr_204}}</td>
+			<td>{{food.phe}}</td>
+			<td>{{food.bcaa}}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	    {% else %}
+	    <div class="well">
+		<div class="starter-template">
+		Nothing yet
+		<h1>:(</h1>
+		<a href="/foods">How about adding a new food?</a>
+		</div>
+	    {% endif %}
+	    </div></div>
+
+	    <!-- Snacks -->
+	    <div class="row">
+	    <h3>Snacks <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    {% if snacks|length != 0 %}
+	    <table class="table table-hover">
+		<thead>
+			<tr>
+			<th> Name </th>
+			<th> Amount </th>
+			<th> Calories </th>
+			<th> Carbs (g)</th>
+			<th> Protein (g)</th>
+			<th> Fats (g)</th>
+			<th> Phenylalanine (g)</th>
+			<th> Branched chain AAs (g)</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for hist in snacks %}
+		  {% set food = hist.food %}
+		  <tr>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
+			<td>{{food.nutr_208}}</td>
+			<td>{{food.nutr_205}}</td>
+			<td>{{food.nutr_203}}</td>
+			<td>{{food.nutr_204}}</td>
+			<td>{{food.phe}}</td>
+			<td>{{food.bcaa}}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	    {% else %}
+	    <div class="well">
+		<div class="starter-template">
+		Nothing yet
+		<h1>:(</h1>
+		<a href="/foods">How about adding a new food?</a>
+		</div></div>
+	    {% endif %}
+	    </div>
+	    
+	    <!-- /.foods -->
+
+    </div><!-- /.container -->
+{% endblock %}

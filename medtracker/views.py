@@ -9,6 +9,27 @@ import flask_login
 from flask_login import login_required
 from flask_login import login_user, logout_user, current_user
 
+def calc_food_stats(f):
+	f.phe = f.nutr_508 if f.nutr_508!=None else ""
+	f.ile = f.nutr_503 if f.nutr_503!=None else float('nan')
+	f.leu = f.nutr_504 if f.nutr_504!=None else float('nan')
+	f.val = f.nutr_510 if f.nutr_510!=None else float('nan')
+	f.bcaa = round(float(f.ile)+float(f.leu)+float(f.val),2)
+	f.bcaa = f.bcaa if math.isnan(f.bcaa)==False else ""
+	return f
+
+def calc_food_stats_units(f,quantity,weight):
+	print(f,weight,quantity)
+	conv_factor = float(weight.gm_weight)/100.*float(quantity)
+	fields = [a for a in f.__dict__.keys() if "nutr_" in a]
+	for n in fields:
+		orig_value = getattr(f,n)
+		if orig_value != None:
+			orig_value = float(orig_value)
+			setattr(f,n,round(orig_value*conv_factor,2))
+	return f
+
+
 @app.route("/")
 def splash_page():
     return send_from_directory("/app/assets/","splash-page/index.html")
@@ -27,32 +48,58 @@ def send_js(path):
 def foods_index():
 	foods = Foods.query.all()
 	for f in foods:
-		f.phe = f.nutr_508 if f.nutr_508!=None else ""
-		f.ile = f.nutr_503 if f.nutr_503!=None else float('nan')
-		f.leu = f.nutr_504 if f.nutr_504!=None else float('nan')
-		f.val = f.nutr_510 if f.nutr_510!=None else float('nan')
-		f.bcaa = round(float(f.ile)+float(f.leu)+float(f.val),2)
-		f.bcaa = f.bcaa if math.isnan(f.bcaa)==False else ""
+		f = calc_food_stats(f)
 	return render_template("foods.html",foods=foods)
+
+@app.route("/foods/<ndb_id>/add", methods=['GET', 'POST'])
+@login_required
+def food_add(ndb_id):
+	food = Foods.query.get_or_404(ndb_id)
+	formobj = FoodHistoryForm(request.form)
+	formobj.units.query = food.weights.all()
+	formobj.food_desc.data = food.long_desc
+	if request.method == 'POST' and formobj.validate():
+		food_hist = FoodHistory(food.ndb_id,
+		                        current_user.id,
+		                        formobj.day.data,
+						        formobj.meal.data,
+						        formobj.quantity.data,
+						        formobj.units.data.index)
+		db_session.add(food_hist)
+		db_session.commit()
+		flash("Food added to history.")
+		return redirect(url_for("food_daily_log"))
+	return render_template("form.html",action="Add", data_type="food to your log", form=formobj)
 
 @app.route("/foods/<int:ndb_id>")
 @login_required
 def food_view(ndb_id):
 	food = Foods.query.get_or_404(ndb_id)
-	'''
-	for f in foods:
-		f.carbs = f.nutrient_data.filter_by(nutr_id='205').first().nutr_value
-		f.protein = f.nutrient_data.filter_by(nutr_id='203').first().nutr_value
-		f.fats = f.nutrient_data.filter_by(nutr_id='204').first().nutr_value
-		f.calories = f.nutrient_data.filter_by(nutr_id='208').first().nutr_value
-		f.phe = f.nutrient_data.filter_by(nutr_id='508').first()
-		f.phe = f.phe.nutr_value if f.phe!=None else 'N/D'
-		f.ile = f.nutrient_data.filter_by(nutr_id='503').first()
-		f.leu = f.nutrient_data.filter_by(nutr_id='504').first()
-		f.val = f.nutrient_data.filter_by(nutr_id='510').first()
-		f.bcaa = round(float(f.ile.nutr_value)+float(f.leu.nutr_value)+float(f.val.nutr_value),2) if (f.ile!=None)&(f.leu!=None)&(f.val!=None) else 'N/D'
-	'''
+	food = calc_food_stats(food)
 	return render_template("food_view.html",food=food)
+
+@app.route("/foods/log")
+@login_required
+def food_daily_log():
+	day = request.values.get("day","2018-10-21")
+	breakfast = FoodHistory.query.filter_by(meal="Breakfast",day=day,user_id=current_user.id).all()
+	lunch= FoodHistory.query.filter_by(meal="Lunch",day=day,user_id=current_user.id).all()
+	dinner = FoodHistory.query.filter_by(meal="Dinner",day=day,user_id=current_user.id).all()
+	snacks = FoodHistory.query.filter_by(meal="Snacks",day=day,user_id=current_user.id).all()
+	for h in breakfast:
+		h.food = calc_food_stats(calc_food_stats_units(h.food,h.quantity,h.weight))
+	for h in lunch:
+		h.food = calc_food_stats(calc_food_stats_units(h.food,h.quantity,h.weight))
+	for h in dinner:
+		h.food = calc_food_stats(calc_food_stats_units(h.food,h.quantity,h.weight))
+	for h in snacks:
+		h.food = calc_food_stats(calc_food_stats_units(h.food,h.quantity,h.weight))
+	return render_template("food_daily_log.html",
+	                       breakfast=breakfast,
+	                       lunch=lunch,
+	                       dinner=dinner,
+	                       snacks=snacks)
+
 
 @app.route("/nutrients")
 @login_required
@@ -83,7 +130,7 @@ def login():					# not logged-in callback
 			return redirect(url_for('index'))
 		else:
 			return redirect(url_for('login'))
-	return render_template('form_login.html', form=form, action="Please log in", data_type="")
+	return render_template('form_login.html', form=form, action="Please log in", data_type="",form_action="/login")
 
 @app.route('/logout')
 def signout():

@@ -1,6 +1,8 @@
-{% extends 'layout.html' %}
+{% from "_forms.html" import render with context %}
+
+{% extends 'layout_sidebar.html' %}
 {% block body %}
-    <div class="container">
+    <div class="col-md-4">
 	
 	{% import '_forms.html' as forms %}
 
@@ -8,8 +10,8 @@
 	<section>
 	<h1>{{ action }} {{ data_type }}</h1>
 	<form action="{{ form_action }}" method="{{ method | d("POST") }}">
-	{{ forms.render(form) }}
-	<input type="submit" value="Submit">
+	{{ render(form) }}
+	<input type="submit" value="Submit" class="btn btn-primary">
 	</form>
 	</section>
 	{% endblock form %}    

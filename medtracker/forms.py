@@ -27,3 +27,15 @@ class NewUserForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     name = StringField('Full Name', validators=[DataRequired()])
+
+class FoodHistoryForm(Form):				
+    '''GUI: survey build form used in views'''
+    food_desc = DisabledTextField('Name')
+    day = DateField('Day consumed')
+    meal = SelectField('Meal', choices=[("Breakfast","Breakfast")
+                       ,("Lunch","Lunch"),
+                       ("Dinner","Dinner"),
+                       ("Snacks","Snacks")])
+    units = QuerySelectField("Serving size", 
+		get_pk=lambda a: a.index, get_label=lambda a: a.measure_desc)
+    quantity = FloatField("Number of servings")

@@ -21,7 +21,7 @@
 		<tbody>
 		{% for food in foods %}
 		  <tr>
-			<td> <a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td><a href="/foods/{{food.ndb_id}}/add" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a> <a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
 			<td>{{food.nutr_208}}</td>
 			<td>{{food.nutr_205}}</td>
 			<td>{{food.nutr_203}}</td>

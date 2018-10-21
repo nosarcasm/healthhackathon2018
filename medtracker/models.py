@@ -180,6 +180,7 @@ class Foods(db.Model):
 
     weights = db.relationship("Food_weights",backref="food",lazy="dynamic")
     nutrient_data = db.relationship("Food_nutrient_data",backref="food",lazy="dynamic")
+    history = db.relationship("FoodHistory",backref="food",lazy="dynamic")
 
     def __repr__(self):
         return "<Food(ndb_id='%s', long_desc='%s')"%(self.ndb_id,self.long_desc)
@@ -211,6 +212,7 @@ class Food_weights(db.Model):
     gm_weight = db.Column(db.Text)
     num_data_pts = db.Column(db.Text)
     std_dev = db.Column(db.Text)
+    history = db.relationship("FoodHistory",backref="weight",lazy="dynamic")
 
     def __repr__(self):
         return "<Weight(index='%s', measure_desc='%s')"%(self.index,self.measure_desc)
@@ -282,6 +284,27 @@ class User(db.Model):
     have many symptomhistory
     have many medicationhistory
     """
+
+class FoodHistory(db.Model):
+
+    __tablename__ = "food_history"
+    
+    id = db.Column(db.BigInteger, primary_key=True)
+    ndb_id = db.Column(db.Text, db.ForeignKey('food_desc_full.ndb_id'),index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),index=True)
+    day = db.Column(db.Date)
+    meal = db.Column(db.Text) #Breakfast, lunch, dinner, snacks (no validation here yet)
+    quantity = db.Column(db.Float) #amount of food eaten
+    units = db.Column(db.BigInteger, db.ForeignKey('food_meas.index'),index=True)
+
+    def __init__(self,ndb_id=None,user_id=None,day=None,meal=None,quantity=None,units=None):
+        self.ndb_id = ndb_id
+        self.user_id = user_id
+        self.day=day
+        self.meal = meal
+        self.quantity = quantity
+        self.units = units
+
 
 """ 
 # MORE TODO 10/19/18
