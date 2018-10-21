@@ -3,11 +3,12 @@
 
 {% block body %}
 	    <div class="page-header">
-		    <h1>{{plan.title}}</h1>
-		    <h3>{{plan.description}} <a href="/foods/{{food.nut_id}}/edit" class="btn btn-xs btn-primary" role="button">Edit</a></h3>
+		    <h1>{{plan.title}}  <a href="/plans/edit/{{plan.id}}" class="btn btn-xs btn-primary" role="button">Edit</a></h1>
+		    <h3>{{plan.description}}</h3>
 	    </div>
-	    <h4>Daily values</h4>
-	    <table class="table table-hover" id="activesort">
+	    {% if plan.details.all()|length != 0 %}
+	    <h4>Daily values <a href="/plans/{{plan.id}}/add" class="btn btn-xs btn-primary" role="button">Add</a></h4>
+	    <table class="table table-hover">
 		    <thead>
 			    <th>Nutrient</th>
 			    <th>Criteria</th>
@@ -22,5 +23,13 @@
 			{% endfor %}
 		   </tbody>
 	    </table>
+	    {% else %}
+	    <div class="well">
+		<div class="starter-template">
+		No plan details yet.
+		<h1>:(</h1>
+		<a href="/plans/{{plan.id}}/add">How about adding some nutrient criteria?</a>
+		</div></div>
+		{% endif %}
 	    </div>
 {% endblock %}
