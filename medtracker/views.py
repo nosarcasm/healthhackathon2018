@@ -6,14 +6,15 @@ import random, string, math
 import pytz
 
 import flask_login
+from flask_login import login_required
 from flask_login import login_user, logout_user, current_user
 
 @app.route("/")
 def splash_page():
     return send_from_directory("/app/assets/","splash-page/index.html")
 
-@flask_login.login_required
 @app.route("/home")
+@login_required
 def index():
     return render_template("index.html")
 
@@ -21,8 +22,8 @@ def index():
 def send_js(path):
     return send_from_directory('/app/assets', path)
 
-@flask_login.login_required
 @app.route("/foods")
+@login_required
 def foods_index():
 	foods = Foods.query.all()
 	for f in foods:
@@ -34,8 +35,8 @@ def foods_index():
 		f.bcaa = f.bcaa if math.isnan(f.bcaa)==False else ""
 	return render_template("foods.html",foods=foods)
 
-@flask_login.login_required
 @app.route("/foods/<int:ndb_id>")
+@login_required
 def food_view(ndb_id):
 	food = Foods.query.get_or_404(ndb_id)
 	'''
@@ -53,8 +54,8 @@ def food_view(ndb_id):
 	'''
 	return render_template("food_view.html",food=food)
 
-@flask_login.login_required
 @app.route("/nutrients")
+@login_required
 def nutrients_index():
 	nutrients = Nutrients.query
 	return render_template("nutrients.html",nutrients=nutrients)
@@ -69,8 +70,8 @@ login_manager.login_view =  "login"
 def user_loader(user_id):				# used by Flask internally to load logged-in user from session
 	return User.query.get(user_id)
 
-@login_manager.unauthorized_handler
 @app.route("/login", methods=["GET", "POST"])
+@login_manager.unauthorized_handler
 def login():					# not logged-in callback
 	form = UsernamePasswordForm()
 	if form.validate_on_submit():

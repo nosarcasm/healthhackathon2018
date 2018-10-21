@@ -9,6 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = sqlalchemy_db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = flask_secret_key
 app.debug = True
+app.config['TESTING'] = False
 
 mail = Mail(app)
 
