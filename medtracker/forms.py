@@ -1,7 +1,7 @@
 from wtforms import *
 from flask_wtf import Form
 from wtforms.ext.sqlalchemy.fields import *
-from wtforms.fields.html5 import DateField
+from wtforms.fields.html5 import DateField, DecimalRangeField
 from wtforms.validators import DataRequired
 from flask.views import MethodView
 import re
@@ -52,3 +52,8 @@ class PlanDetailForm(Form):
                        (">","greater than"),
                        (">=","greater than or equal to")])
     value = FloatField("Value")
+
+class SymptomForm(Form):
+	name = TextField("Name")
+	day = DateField('Day occurred')
+	value = DecimalRangeField("Severity", {"min":0,"max":10})

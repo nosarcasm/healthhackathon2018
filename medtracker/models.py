@@ -8,7 +8,40 @@ from passlib.apps import custom_app_context as pwd_context #encrypts password
 
 db = SQLAlchemy(app) #create the db object in sqlalchemy
 
-#float(f.weights.all()[1].gm_weight)/100.*float(f.nutrient_data.first().nutr_value)
+#copypasta from https://stackoverflow.com/questions/6587879/how-to-elegantly-check-the-existence-of-an-object-instance-variable-and-simultan
+def get_or_create(model, **kwargs):
+    '''get_or_create()
+
+    Description: checks to see if an object with those properties exists in the db
+    and returns it if it exists, otherwise returns a new object
+    instantiated with the search **kwargs
+
+    Inputs:
+        model
+            an empty instance of a class that inherits from sqlalchemy.model (e.g. class PersistentMedication(db.Model)).
+            This should work with any class in this file.
+        **kwargs
+            filters for the database on that model when checking if an object exists already.
+            For example, if we pass pricetable_id=12345 in the keyword arguments,
+            it will return the first item of class *model* from the database that
+            matches pricetable_id=12345 (e.g. the first PersistentMedication record).
+
+    Returns:
+        object
+            The class object that was either found from the database or instantiated with **kwargs.
+            This always returns an object the same class as the input *model*.
+        found
+            A boolean that denotes whether we found an object in the database (GET) or are
+            instantiating it (CREATE). True if GET, False if CREATE.
+    '''
+    try:
+        object = db.session.query(model).filter_by(**kwargs).first() #check if the object of class model exists in db
+                                                                        #filtered on kwargs criteria and return the first match
+        assert object != None #check if we got an object back
+        return object, object != None
+    except AssertionError:
+        object = model(**kwargs) #return a blank object instatiated with kwargs if not found
+        return object, False #set found to false
 
 class Foods(db.Model):
 
@@ -271,6 +304,7 @@ class User(db.Model):
     authenticated = db.Column(db.Boolean, default=False)
 
     treatments = db.relationship("Treatments",backref="user",lazy="dynamic")
+    symptom_history = db.relationship("SymptomHistory",backref="user",lazy="dynamic")
     
     def is_active(self):
         """True, as all users are active."""
@@ -347,6 +381,33 @@ class TreatmentDetail(db.Model):
         self.nutr_id = nutr_id
         self.operator = operator
         self.value = value
+
+class Symptoms(db.Model):
+
+    __tablename__ = "symptoms"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    history = db.relationship("SymptomHistory",backref="symptom",lazy="dynamic")
+
+    def __init__(self, name=name):
+        self.name=name
+
+class SymptomHistory(db.Model):
+
+    __tablename__ = "symptom_history"
+
+    id = db.Column(db.Integer, primary_key=True)
+    symptom_id = db.Column(db.Integer, db.ForeignKey('symptoms.id'),index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),index=True)
+    value = db.Column(db.Text)
+    day = db.Column(db.Date)
+
+    def __init__(self,symptom_id=symptom_id,user_id=user_id,value=value,day=day):
+        self.symptom_id = symptom_id
+        self.user_id=user_id
+        self.value=value
+        self.day=day
 
 """ 
 # MORE TODO 10/19/18

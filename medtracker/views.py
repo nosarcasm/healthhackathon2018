@@ -128,10 +128,12 @@ def food_view(ndb_id):
 	food = calc_food_stats(food)
 	return render_template("food_view.html",food=food)
 
+@app.route("/log")
 @app.route("/foods/log")
 @login_required
 def food_daily_log():
 	day = request.values.get("day","2018-10-21")
+	symptom_history = current_user.symptom_history.filter_by(day=day).all()
 	all_meals = FoodHistory.query.filter_by(day=day,user_id=current_user.id).all()
 	totals = calc_nutrient_totals(all_meals)
 	active_plan = current_user.treatments.filter_by(active=1).first()
@@ -162,7 +164,8 @@ def food_daily_log():
 	                       lunch=lunch,
 	                       dinner=dinner,
 	                       snacks=snacks, totals=totals, active_plan=active_plan, plan_details=plan_details,
-	                       indicator=indicator, flags=flags)
+	                       indicator=indicator, flags=flags,day=datetime.datetime(*[int(i) for i in day.split("-")]).strftime("%B %d, %Y"),
+	                       symptom_history=symptom_history)
 @app.route("/foods/history/delete/<int:hist_id>")
 @login_required
 def delete_food_history(hist_id):
@@ -253,6 +256,43 @@ def delete_plan(plan_id):
 	db.session.commit()
 	flash("Plan deleted.")
 	return redirect(url_for("plan_index"))
+
+@app.route("/symptoms/log")
+@login_required
+def symptoms_daily_log():
+	day = request.values.get("day","2018-10-21")
+	symptom_history = current_user.symptom_history.filter_by(day=day).all()
+	return render_template("symptom_log.html",symptom_history=symptom_history,
+	                       day=datetime.datetime(*[int(i) for i in day.split("-")]).strftime("%B %d, %Y"))
+
+@app.route("/symptoms/add", methods=["GET", "POST"])
+@login_required
+def symptoms_add():
+	formobj = SymptomForm()
+	sh = SymptomHistory()
+	sh.user_id = current_user.id
+	formobj.day.data = datetime.datetime.now()
+	if request.method == 'POST':
+		symptom,exists = get_or_create(Symptoms, name=formobj.name.data)
+		if exists==False:
+			db.session.add(symptom)
+		sh.symptom = symptom
+		sh.value = round(float(formobj.value.data)/10.,1)
+		sh.day = formobj.day.data
+		db.session.add(sh)
+		db.session.commit()
+		return redirect(url_for("symptoms_daily_log"))
+	return render_template("form.html",action="Add", data_type="a symptom", form=formobj)
+
+@app.route("/symptoms/history/delete/<int:h_id>")
+@login_required
+def symptom_history_delete(h_id):
+	h = SymptomHistory.query.get_or_404(h_id)
+	db.session.delete(h)
+	db.session.commit()
+	flash("Symptom deleted.")
+	return redirect(url_for("symptoms_daily_log"))
+
 
 @app.route("/nutrients")
 @login_required

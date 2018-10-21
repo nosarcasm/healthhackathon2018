@@ -1,0 +1,37 @@
+{% extends 'layout_sidebar.html' %}
+{% block title %}Symptom Log | Demeter{% endblock %}
+
+{% block body %}
+	    <div class="page-header">
+		    <h1>Symptom log</h1>
+		    <h3>For {{day}} <a href="/symptoms/add" class="btn btn-xs btn-primary" role="button">Add</a></h3>
+	    </div>
+	    <div class="row">
+		<div class="col-md-8">
+	    {% if symptom_history|length != 0 %}	    
+	    <table class="table table-hover">
+		    <thead>
+			    <th>Symptom</th>
+			    <th>Value</th>
+			    <th>Actions</th>
+		    </thead>
+		   <tbody>
+		   	{% for h in symptom_history %}
+			<tr><td>{{h.symptom.name}}</td>
+				<td><input class="form-control" id="value" name="value" step="0.1" 
+				min="0" max="10" type="range" value="{{h.value}}" disabled style="max-width:100px;display: inline;height:12px">  {{h.value}} out of 10</td>
+				<td><a href="/symptoms/history/delete/{{h.id}}" class="btn btn-xs btn-danger">Delete <i class="fas fa-minus-circle"></i></a></td>	
+			</tr>
+			{% endfor %}
+		   </tbody>
+	    </table>
+	    {% else %}
+	    <div class="well">
+		<div class="starter-template">
+		No symptoms logged today, hooray!
+		<h1>:)</h1>
+		<a href="/symptoms/add">In case you start feeling bad, log it here ></a>
+		</div></div>
+	    {% endif %}
+	    </div></div>
+{% endblock %}
