@@ -2,8 +2,9 @@ from medtracker import *
 from medtracker.models import *
 from medtracker.forms import *
 from flask import flash, Markup
-import random, string, math, datetime
+import random, string, math, datetime, copy
 import pytz
+from collections import defaultdict
 
 import flask_login
 from flask_login import login_required
@@ -21,13 +22,31 @@ def calc_food_stats(f):
 def calc_food_stats_units(f,quantity,weight):
 	conv_factor = float(weight.gm_weight)/100.*float(quantity)
 	fields = [a for a in f.__dict__.keys() if "nutr_" in a]
+	out = copy.copy(f)
 	for n in fields:
 		orig_value = getattr(f,n)
 		if orig_value != None:
 			orig_value = float(orig_value)
-			setattr(f,n,round(orig_value*conv_factor,2))
-	return f
+			setattr(out,n,round(orig_value*conv_factor,2))
+	return out
 
+def calc_nutrient_totals(h_arr):
+	f = h_arr[0].food
+	fields = [a for a in f.__dict__.keys() if "nutr_" in a]
+	totals = defaultdict(float)
+	for h in h_arr:
+		food = calc_food_stats_units(h.food, h.quantity, h.weight)
+		for field in fields:
+			nutrient = Nutrients.query.get(field.split("_")[1])
+			value = getattr(food,field)
+			value = value if value!= None else 0
+			totals[nutrient] += value
+	return totals
+
+def filter_totals(totals,active_plan):
+	nutrients_considered = [d.nutrient for d in active_plan.details]
+	filtered_totals = {k:v for k,v in totals.items() if k in nutrients_considered}
+	return filtered_totals
 
 @app.route("/")
 def splash_page():
@@ -89,9 +108,10 @@ def food_add(ndb_id):
 		return redirect(url_for("food_daily_log"))
 	return render_template("form.html",action="Add", data_type="food to your log", form=formobj)
 
-@app.route("/foods/<int:ndb_id>")
+@app.route("/foods/<ndb_id>")
 @login_required
 def food_view(ndb_id):
+	print(ndb_id)
 	food = Foods.query.get_or_404(ndb_id)
 	food = calc_food_stats(food)
 	return render_template("food_view.html",food=food)
@@ -100,6 +120,19 @@ def food_view(ndb_id):
 @login_required
 def food_daily_log():
 	day = request.values.get("day","2018-10-21")
+	all_meals = FoodHistory.query.filter_by(day=day,user_id=current_user.id).all()
+	totals = calc_nutrient_totals(all_meals)
+	active_plan = current_user.treatments.filter_by(active=1).first()
+	if active_plan!=None:
+		plan_details = {d.nutrient:d.operator+d.value for d in active_plan.details}
+		indicator = {nutrient:eval(str(totals[nutrient])+plan_details[nutrient])==False for nutrient in plan_details.keys()}
+		flags = {d.nutrient:"High" if totals[d.nutrient]>float(d.value) else "Low" for d in active_plan.details}
+		totals = filter_totals(totals, active_plan)
+	else:
+		plan_details = dict()
+		indicator = dict()
+		flags = dict()
+		totals = dict()
 	breakfast = FoodHistory.query.filter_by(meal="Breakfast",day=day,user_id=current_user.id).all()
 	lunch= FoodHistory.query.filter_by(meal="Lunch",day=day,user_id=current_user.id).all()
 	dinner = FoodHistory.query.filter_by(meal="Dinner",day=day,user_id=current_user.id).all()
@@ -116,7 +149,8 @@ def food_daily_log():
 	                       breakfast=breakfast,
 	                       lunch=lunch,
 	                       dinner=dinner,
-	                       snacks=snacks)
+	                       snacks=snacks, totals=totals, active_plan=active_plan, plan_details=plan_details,
+	                       indicator=indicator, flags=flags)
 @app.route("/foods/history/delete/<int:hist_id>")
 @login_required
 def delete_food_history(hist_id):
@@ -182,13 +216,17 @@ def delete_plan_detail(treatdetail_id):
 @app.route("/plans/<state>/<int:plan_id>")
 @login_required
 def toggle_plan(state,plan_id):
+	plan = Treatments.query.get_or_404(plan_id)
+	user_plans = current_user.treatments.all()
 	if state=="activate":
 		toggle=1
+		for u in user_plans:
+			u.active = 0
+			db.session.add(u)
 	elif state=="deactivate":
 		toggle=0
 	else:
 		return "Toggle not found", 404
-	plan = Treatments.query.get_or_404(plan_id)
 	plan.active = toggle
 	db.session.add(plan)
 	db.session.commit()

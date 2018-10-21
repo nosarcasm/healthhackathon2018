@@ -201,6 +201,19 @@ class Nutrients(db.Model):
     def __repr__(self):
         return "<Nutrient(nutr_id='%s', nutr_desc='%s')"%(self.nutr_id,self.nutr_desc)
 
+    def __hash__(self):
+        return hash((self.nutr_id, self.nutr_desc))
+
+    def __eq__(self, other):
+        if type(other)!=type(self):
+            return False
+        return (self.nutr_id, self.nutr_desc) == (other.nutr_id, other.nutr_desc)
+
+    def __ne__(self, other):
+        # Not strictly necessary, but to avoid having both x==y and x!=y
+        # True at the same time
+        return not(self == other)
+
 class Food_weights(db.Model):
 
     __tablename__ = 'food_meas'

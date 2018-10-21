@@ -2,9 +2,33 @@
 {% block title %}Foods | Demeter {% endblock %}
 {% block body %}
 	    <div class="page-header">
-		    <h2>Food for October 21, 2018</h2>
+		    <h2>My plan for October 21, 2018</h2>
 	    </div>
-
+	    {% if active_plan!=None %}
+	    <div class="row">
+	    <h3>Plan progress on <a href="/plans/view/{{active_plan.id}}">{{active_plan.title}}</a></h3>
+	    <table class="table table-hover">
+		<thead>
+			<tr>
+			<th> Name </th>
+			<th> Amount </th>
+			<th> Flags </th>
+			<th> Requirement </th>
+			</tr>
+		</thead>
+		<tbody>
+	    {% for key in totals %}
+	    <tr>
+	    	<td>{{key.nutr_desc}} ({{key.units}})</td>
+	    	<td>{% if indicator[key] %}<mark>{{totals[key]}} {{key.units}}</mark>{% else %}{{totals[key]}} {{key.units}}{%endif%}</td>
+	    	<td>{% if indicator[key] %}{{flags[key]}}{%endif%}</td>
+	    	<td>{{plan_details[key]}} {{key.units}}</td>
+	    </tr>
+	    {% endfor %}
+			</tbody>
+		</table>
+		</div>
+		{% endif %}
 	    <!-- Breakfast -->
 	    <div class="row">
 	    <h3>Breakfast <a href="/foods/search?meal=Breakfast" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
@@ -15,11 +39,11 @@
 			<th> Name </th>
 			<th> Amount </th>
 			<th> Calories </th>
-			<th> Carbs (g)</th>
-			<th> Protein (g)</th>
-			<th> Fats (g)</th>
-			<th> Phenylalanine (g)</th>
-			<th> Branched chain AAs (g)</th>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			{% endfor %}
+			{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -29,11 +53,11 @@
 			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
-			<td>{{food.nutr_205}}</td>
-			<td>{{food.nutr_203}}</td>
-			<td>{{food.nutr_204}}</td>
-			<td>{{food.phe}}</td>
-			<td>{{food.bcaa}}</td>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<td>{{food["nutr_"+key.nutr_id]}}</td>
+			{% endfor %}
+			{% endif %}
 		  </tr>
 		{% endfor %}
 		</tbody>
@@ -59,11 +83,11 @@
 			<th> Name </th>
 			<th> Amount </th>
 			<th> Calories </th>
-			<th> Carbs (g)</th>
-			<th> Protein (g)</th>
-			<th> Fats (g)</th>
-			<th> Phenylalanine (g)</th>
-			<th> Branched chain AAs (g)</th>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			{% endfor %}
+			{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -73,11 +97,11 @@
 			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
-			<td>{{food.nutr_205}}</td>
-			<td>{{food.nutr_203}}</td>
-			<td>{{food.nutr_204}}</td>
-			<td>{{food.phe}}</td>
-			<td>{{food.bcaa}}</td>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<td>{{food["nutr_"+key.nutr_id]}}</td>
+			{% endfor %}
+			{% endif %}
 		  </tr>
 		{% endfor %}
 		</tbody>
@@ -102,11 +126,11 @@
 			<th> Name </th>
 			<th> Amount </th>
 			<th> Calories </th>
-			<th> Carbs (g)</th>
-			<th> Protein (g)</th>
-			<th> Fats (g)</th>
-			<th> Phenylalanine (g)</th>
-			<th> Branched chain AAs (g)</th>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			{% endfor %}
+			{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -116,11 +140,11 @@
 			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
-			<td>{{food.nutr_205}}</td>
-			<td>{{food.nutr_203}}</td>
-			<td>{{food.nutr_204}}</td>
-			<td>{{food.phe}}</td>
-			<td>{{food.bcaa}}</td>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<td>{{food["nutr_"+key.nutr_id]}}</td>
+			{% endfor %}
+			{% endif %}
 		  </tr>
 		{% endfor %}
 		</tbody>
@@ -145,11 +169,11 @@
 			<th> Name </th>
 			<th> Amount </th>
 			<th> Calories </th>
-			<th> Carbs (g)</th>
-			<th> Protein (g)</th>
-			<th> Fats (g)</th>
-			<th> Phenylalanine (g)</th>
-			<th> Branched chain AAs (g)</th>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			{% endfor %}
+			{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -159,11 +183,11 @@
 			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
-			<td>{{food.nutr_205}}</td>
-			<td>{{food.nutr_203}}</td>
-			<td>{{food.nutr_204}}</td>
-			<td>{{food.phe}}</td>
-			<td>{{food.bcaa}}</td>
+			{% if active_plan!=None %}
+			{% for key in totals %}
+			<td>{{food["nutr_"+key.nutr_id]}}</td>
+			{% endfor %}
+			{% endif %}
 		  </tr>
 		{% endfor %}
 		</tbody>
@@ -176,9 +200,7 @@
 		<a href="/foods">How about adding a new food?</a>
 		</div></div>
 	    {% endif %}
-	    </div>
-	    
-	    <!-- /.foods -->
+	    </div><!-- /.foods -->
 
     </div><!-- /.container -->
 {% endblock %}

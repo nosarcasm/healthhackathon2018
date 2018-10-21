@@ -20,7 +20,7 @@
 				<td><a href="/plan/details/delete/{{d.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a>
 				{{d.nutrient.nutr_desc}} ({{d.nutrient.units}})</td>
 				<td>{{d.operator}}</td>
-				<td>{{d.value}}</td></tr>
+				<td>{{d.value}} {{d.nutrient.units}}</td></tr>
 			{% endfor %}
 		   </tbody>
 	    </table>
