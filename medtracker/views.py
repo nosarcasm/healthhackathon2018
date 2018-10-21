@@ -2,7 +2,7 @@ from medtracker import *
 from medtracker.models import *
 from medtracker.forms import *
 from flask import flash, Markup
-import random, string, math
+import random, string, math, datetime
 import pytz
 
 import flask_login
@@ -19,7 +19,6 @@ def calc_food_stats(f):
 	return f
 
 def calc_food_stats_units(f,quantity,weight):
-	print(f,weight,quantity)
 	conv_factor = float(weight.gm_weight)/100.*float(quantity)
 	fields = [a for a in f.__dict__.keys() if "nutr_" in a]
 	for n in fields:
@@ -51,13 +50,32 @@ def foods_index():
 		f = calc_food_stats(f)
 	return render_template("foods.html",foods=foods)
 
+@app.route("/foods/search")
+@login_required
+def foods_search():
+	search_term = request.values.get("search_term","")
+	meal = request.values.get("meal","")
+	if search_term != "":
+		foods = Foods.query.filter(Foods.long_desc.contains(search_term)).all()
+		for f in foods:
+			f.str_pos = f.long_desc.lower().index(search_term.lower()) if search_term.lower() in f.long_desc.lower() else 99
+			f = calc_food_stats(f)
+		foods = sorted(foods,key=lambda f: f.str_pos)
+	else:
+		foods = []
+	return render_template("foods_search.html",foods=foods,search_term=search_term,meal=meal)
+
 @app.route("/foods/<ndb_id>/add", methods=['GET', 'POST'])
 @login_required
 def food_add(ndb_id):
 	food = Foods.query.get_or_404(ndb_id)
+	meal = request.values.get("meal","")
 	formobj = FoodHistoryForm(request.form)
 	formobj.units.query = food.weights.all()
 	formobj.food_desc.data = food.long_desc
+	formobj.day.data = datetime.datetime.now()
+	if meal != "":
+		formobj.meal.data = meal
 	if request.method == 'POST' and formobj.validate():
 		food_hist = FoodHistory(food.ndb_id,
 		                        current_user.id,
@@ -65,8 +83,8 @@ def food_add(ndb_id):
 						        formobj.meal.data,
 						        formobj.quantity.data,
 						        formobj.units.data.index)
-		db_session.add(food_hist)
-		db_session.commit()
+		db.session.add(food_hist)
+		db.session.commit()
 		flash("Food added to history.")
 		return redirect(url_for("food_daily_log"))
 	return render_template("form.html",action="Add", data_type="food to your log", form=formobj)
@@ -99,7 +117,48 @@ def food_daily_log():
 	                       lunch=lunch,
 	                       dinner=dinner,
 	                       snacks=snacks)
+@app.route("/foods/history/delete/<int:hist_id>")
+@login_required
+def delete_food_history(hist_id):
+	history = FoodHistory.query.get_or_404(hist_id)
+	db.session.delete(history)
+	db.session.commit()
+	flash("Food deleted.")
+	return redirect(url_for("food_daily_log"))
 
+@app.route("/plans")
+@login_required
+def plan_index():
+	plans = Treatments.query.all()
+	return render_template("meal_plans.html", plans = plans)
+
+@app.route("/plans/view/<int:plan_id>", methods=["GET", "POST"])
+@login_required
+def plan_view(plan_id):
+	plan = Treatments.query.get_or_404(plan_id)
+	return render_template("plan_view.html",plan=plan)
+
+@app.route("/plans/new", methods=["GET", "POST"])
+@login_required
+def plan_add():
+	formobj = PlanForm()
+	plan = Treatments()
+	if request.method == 'POST' and formobj.validate():
+		formobj.populate_obj(plan)
+		db.session.add(plan)
+		db.session.commit()
+		flash("Plan added")
+		return redirect(url_for("plan_index"))
+	return render_template("form.html",action="Add", data_type="a meal plan", form=formobj)
+
+@app.route("/plans/delete/<int:plan_id>")
+@login_required
+def delete_plan(plan_id):
+	plan = Treatments.query.get_or_404(plan_id)
+	db.session.delete(plan)
+	db.session.commit()
+	flash("Plan deleted.")
+	return redirect(url_for("plan_index"))
 
 @app.route("/nutrients")
 @login_required

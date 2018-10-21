@@ -5,11 +5,13 @@ from flask.ext.mail import Mail
 
 #Flask init
 app = Flask(__name__, static_folder='')
-app.config['SQLALCHEMY_DATABASE_URI'] = sqlalchemy_db
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///"+app.root_path+"/"+sqlalchemy_db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = flask_secret_key
 app.debug = True
 app.config['TESTING'] = False
+
+print(app.config['SQLALCHEMY_DATABASE_URI'])
 
 mail = Mail(app)
 

@@ -196,6 +196,7 @@ class Nutrients(db.Model):
     sr_order = db.Column(db.Text)
 
     data = db.relationship("Food_nutrient_data",backref="nutrient",lazy="dynamic")
+    treatmentdetails = db.relationship("TreatmentDetail",backref="nutrient",lazy="dynamic")
 
     def __repr__(self):
         return "<Nutrient(nutr_id='%s', nutr_desc='%s')"%(self.nutr_id,self.nutr_desc)
@@ -305,15 +306,29 @@ class FoodHistory(db.Model):
         self.quantity = quantity
         self.units = units
 
+class Treatments(db.Model):
+
+    __tablename__ = "treatments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
+    description = db.Column(db.Text)
+    details = db.relationship("TreatmentDetail",backref="treatment",lazy="dynamic")
+
+class TreatmentDetail(db.Model):
+
+    __tablename__ = "treatment_details"
+
+    id = db.Column(db.Integer, primary_key=True)
+    treatment_id = db.Column(db.Integer, db.ForeignKey('treatments.id'))
+    nutr_id = db.Column(db.Text, db.ForeignKey('nut_def.nutr_id'))
+    operator = db.Column(db.Text)
+    value = db.Column(db.Text) #will be in the units of the nutrient
 
 """ 
 # MORE TODO 10/19/18
 
 ## we need a way to add custom foods and allow users to specify nutrients
-
-class FoodHistory(db.Model):
-    ##TODO
-    belongs_to user
 
 class Disease(db.Model):
     ##TODO
@@ -347,20 +362,4 @@ class MedicationHistory(db.Model):
     belongs to patient
     join with medication
     time_had
-
-class Treatments(db.Model):
-    ##TODO
-    '''named treatments for disease'''
-    has many diseases
-    treatmentdetail
-    name_of_treatment
-
-class TreatmentDetail(db.Model):
-    ##TODO
-    belongs_to treatment
-    treatment id (joins)
-    value
-    operator (<,==,>)
-    units (%, g, mg, etc.)
-
 """

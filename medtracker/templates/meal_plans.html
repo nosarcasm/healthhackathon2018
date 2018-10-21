@@ -1,0 +1,35 @@
+{% extends "layout_sidebar.html" %}
+{% block title %}Meal plans | Demeter {% endblock %}
+{% block body %}
+	    <div class="page-header">
+		    <h2> My meal plans <a href="/plans/new" class="btn btn-sm btn-primary">Add</a></h2>
+	    </div>
+	    
+	    <div class="row">
+		{% for plan in plans %}
+			<div class="card card--medium col-xs-3">
+			  <h2 class="card__title"><a href="/plans/view/{{ plan.id }}">{{ plan.title }}</a></h2>
+			  <p class="card__text">{{plan.description}}</p>
+			  <div class="card__action-bar">
+				<button class="card__button"><a href="/plans/edit/{{ plan.id }}">Edit</a></button>
+				<button class="card__button"><a href="/plans/delete/{{ plan.id }}" style="color:red">Delete</a></button>
+			  </div>
+			</div>		
+		{% endfor %}
+		</div>
+		
+	    {% if plans|length == 0 %}
+	    <div class="well">
+		<div class="starter-template">
+		No meal plans yet.
+		<h1>:(</h1>
+		<a href="/plans/new">How about making a new plan?</a>
+		</div></div>
+	    {% else %}
+	    <div class="row" style="padding-top:20px;">
+	    
+	    </div>
+	    {% endif %}
+	    </div>
+    </div><!-- /.container -->
+{% endblock %}

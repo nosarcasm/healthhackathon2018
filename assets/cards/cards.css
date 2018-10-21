@@ -199,8 +199,8 @@ button {
 }
 .card--medium {
   box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.3), 0 11px 7px 0 rgba(0, 0, 0, 0.19);
-  height: 260px;
-  min-height: 208px;
+  height: 200px;
+  min-height: 160px;
 }
 .card--medium .card__image {
   border-radius: 1px 1px 0 0;

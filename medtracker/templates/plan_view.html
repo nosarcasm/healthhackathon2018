@@ -1,0 +1,26 @@
+{% extends 'layout_sidebar.html' %}
+{% block title %}{{plan.title}} | Demeter{% endblock %}
+
+{% block body %}
+	    <div class="page-header">
+		    <h1>{{plan.title}}</h1>
+		    <h3>{{plan.description}} <a href="/foods/{{food.nut_id}}/edit" class="btn btn-xs btn-primary" role="button">Edit</a></h3>
+	    </div>
+	    <h4>Daily values</h4>
+	    <table class="table table-hover" id="activesort">
+		    <thead>
+			    <th>Nutrient</th>
+			    <th>Criteria</th>
+			    <th>Value</th>
+		    </thead>
+		   <tbody>
+		   	{% for d in plan.details %}
+			<tr>
+				<td>{{d.nutrient.nutr_desc}} ({{d.nutrient.units}})</td>
+				<td>{{d.operator}}</td>
+				<td>{{d.value}}</td></tr>
+			{% endfor %}
+		   </tbody>
+	    </table>
+	    </div>
+{% endblock %}

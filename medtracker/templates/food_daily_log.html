@@ -7,7 +7,7 @@
 
 	    <!-- Breakfast -->
 	    <div class="row">
-	    <h3>Breakfast <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    <h3>Breakfast <a href="/foods/search?meal=Breakfast" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
 	    {% if breakfast|length != 0 %}
 	    <table class="table table-hover">
 		<thead>
@@ -26,7 +26,7 @@
 		{% for hist in breakfast %}
 			{% set food = hist.food %}
 		  <tr>
-			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
 			<td>{{food.nutr_205}}</td>
@@ -51,7 +51,7 @@
 
 	    <!-- Lunch -->
 	    <div class="row">
-	    <h3>Lunch <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    <h3>Lunch <a href="/foods/search?meal=Lunch" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
 	    {% if lunch|length != 0 %}
 	    <table class="table table-hover">
 		<thead>
@@ -70,7 +70,7 @@
 		{% for hist in lunch %}
 		  {% set food = hist.food %}
 		  <tr>
-			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
 			<td>{{food.nutr_205}}</td>
@@ -94,7 +94,7 @@
 
 	    <!-- Dinner -->
 	    <div class="row">
-	    <h3>Dinner <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    <h3>Dinner <a href="/foods/search?meal=Dinner" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
 	    {% if dinner|length != 0 %}
 	    <table class="table table-hover">
 		<thead>
@@ -113,7 +113,7 @@
 		{% for hist in dinner %}
 		  {% set food = hist.food %}
 		  <tr>
-			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
 			<td>{{food.nutr_205}}</td>
@@ -131,13 +131,13 @@
 		Nothing yet
 		<h1>:(</h1>
 		<a href="/foods">How about adding a new food?</a>
-		</div>
+		</div></div>
 	    {% endif %}
-	    </div></div>
+	    </div>
 
 	    <!-- Snacks -->
 	    <div class="row">
-	    <h3>Snacks <a href="/foods" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
+	    <h3>Snacks <a href="/foods/search?meal=Snacks" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
 	    {% if snacks|length != 0 %}
 	    <table class="table table-hover">
 		<thead>
@@ -156,7 +156,7 @@
 		{% for hist in snacks %}
 		  {% set food = hist.food %}
 		  <tr>
-			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a></td>
+			<td><a href="/foods/{{food.ndb_id}}">{{food.long_desc}}</a> <a href="/foods/history/delete/{{hist.id}}" class="btn btn-xs btn-secondary"><i class="fas fa-minus-circle"></i></a></td>
 			<td>{{hist.quantity}} {{hist.weight.measure_desc}}</td>
 			<td>{{food.nutr_208}}</td>
 			<td>{{food.nutr_205}}</td>

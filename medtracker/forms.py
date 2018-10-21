@@ -39,3 +39,7 @@ class FoodHistoryForm(Form):
     units = QuerySelectField("Serving size", 
 		get_pk=lambda a: a.index, get_label=lambda a: a.measure_desc)
     quantity = FloatField("Number of servings")
+
+class PlanForm(Form):
+	title = TextField("Title")
+	description = TextField("Description")
