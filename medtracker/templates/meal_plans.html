@@ -7,10 +7,15 @@
 	    
 	    <div class="row">
 		{% for plan in plans %}
-			<div class="card card--medium col-xs-3">
+			<div class="card card--medium {% if plan.active==1 %}card--active{%endif%} col-xs-3">
 			  <h2 class="card__title"><a href="/plans/view/{{ plan.id }}">{{ plan.title }}</a></h2>
 			  <p class="card__text">{{plan.description}}</p>
 			  <div class="card__action-bar">
+			  	{% if plan.active==1 %}
+			  	<button class="card__button"><a href="/plans/deactivate/{{ plan.id }}">Deactivate</a></button>
+			  	{% else %}
+			  	<button class="card__button"><a href="/plans/activate/{{ plan.id }}">Activate</a></button>
+			  	{% endif %}
 				<button class="card__button"><a href="/plans/edit/{{ plan.id }}">Edit</a></button>
 				<button class="card__button"><a href="/plans/delete/{{ plan.id }}" style="color:red">Delete</a></button>
 			  </div>

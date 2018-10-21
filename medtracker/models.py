@@ -256,6 +256,8 @@ class User(db.Model):
     name = db.Column(db.String)
     password_hash = db.Column(db.String(256))
     authenticated = db.Column(db.Boolean, default=False)
+
+    treatments = db.relationship("Treatments",backref="user",lazy="dynamic")
     
     def is_active(self):
         """True, as all users are active."""
@@ -311,6 +313,8 @@ class Treatments(db.Model):
     __tablename__ = "treatments"
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),index=True)
+    active = db.Column(db.Boolean)
     title = db.Column(db.Text)
     description = db.Column(db.Text)
     details = db.relationship("TreatmentDetail",backref="treatment",lazy="dynamic")

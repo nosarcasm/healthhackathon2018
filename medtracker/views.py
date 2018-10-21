@@ -129,7 +129,7 @@ def delete_food_history(hist_id):
 @app.route("/plans")
 @login_required
 def plan_index():
-	plans = Treatments.query.all()
+	plans = current_user.treatments.all()
 	return render_template("meal_plans.html", plans = plans)
 
 @app.route("/plans/view/<int:plan_id>", methods=["GET", "POST"])
@@ -145,6 +145,7 @@ def plan_add():
 	plan = Treatments()
 	if request.method == 'POST' and formobj.validate():
 		formobj.populate_obj(plan)
+		plan.user_id = current_user.id
 		db.session.add(plan)
 		db.session.commit()
 		flash("Plan added")
@@ -177,6 +178,22 @@ def delete_plan_detail(treatdetail_id):
 	db.session.commit()
 	flash("Detail deleted.")
 	return redirect(url_for("plan_view",plan_id=plan_id))
+
+@app.route("/plans/<state>/<int:plan_id>")
+@login_required
+def toggle_plan(state,plan_id):
+	if state=="activate":
+		toggle=1
+	elif state=="deactivate":
+		toggle=0
+	else:
+		return "Toggle not found", 404
+	plan = Treatments.query.get_or_404(plan_id)
+	plan.active = toggle
+	db.session.add(plan)
+	db.session.commit()
+	flash("Plan "+state+"d.")
+	return redirect(url_for("plan_index"))
 
 @app.route("/plans/delete/<int:plan_id>")
 @login_required

@@ -202,6 +202,9 @@ button {
   height: 200px;
   min-height: 160px;
 }
+.card--active {
+  background-color: #d6ffd6;
+}
 .card--medium .card__image {
   border-radius: 1px 1px 0 0;
   left: -100%;
