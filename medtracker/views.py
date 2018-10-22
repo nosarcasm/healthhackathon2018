@@ -144,6 +144,7 @@ def food_daily_log():
 		flags = {d.nutrient:"High" if totals[d.nutrient]>float(d.value) else "Low" for d in active_plan.details}
 		totals = filter_totals(totals, active_plan)
 	else:
+		plan_values = dict()
 		plan_details = dict()
 		indicator = dict()
 		flags = dict()

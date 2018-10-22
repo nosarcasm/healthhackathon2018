@@ -160,7 +160,7 @@ header.masthead {
   color: white;
   background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("/assets/splash-page/img/download.jpeg"), -webkit-gradient(linear, right top, left top, from(#00ba55), to(#008828));
   background-repeat: no-repeat;
-  background-size: 120% auto;
+  background-size: cover;
 }
 
 header.masthead .header-content {

@@ -3,16 +3,9 @@
 {% block body %}
 		<style>
 		.symptom{
-		  	font-size: 1.5rem;
+		  	font-size: 1 rem;
 		  	text-align: center;
 		}
-		{% for h in symptom_history %}
-		#container_{{h.id}} {
-		  margin: 20px;
-		  width: 150px;
-		  height: 100px;
-		}
-		{% endfor %}
 		</style>
 	    <div class="page-header">
 		    <h2>My plan for {{day}}</h2>
@@ -23,7 +16,7 @@
 		<h3>Today's symptoms</h3><br>
 		{% if symptom_history|length != 0 %}	    
 		   	{% for h in symptom_history %}
-			<div class="col-sm-2 symptom">
+			<div class="col-xs-3 symptom">
 				<div id="container_h_{{h.id}}">
 				</div><br>
 				{{h.symptom.name}} <a href="/symptoms/history/delete/{{h.id}}" class="btn btn-xs btn-danger"><i class="fas fa-minus-circle"></i></a>
@@ -72,7 +65,7 @@
 				  }
 				});
 			  bar_{{h.id}}.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
-			  bar_{{h.id}}.text.style.fontSize = '2rem';
+			  bar_{{h.id}}.text.style.fontSize = '1.5rem';
 			  bar_{{h.id}}.animate({{h.value|float/10}});
 			  {% endfor %}
 			</script>
@@ -80,19 +73,17 @@
 		<br><br>
 	    {% if active_plan!=None %}
 	    <div class="row">
-	    <div class="col-md-10">
 	    <h3>Plan progress on <a href="/plans/view/{{active_plan.id}}">{{active_plan.title}}</a></h3>
 	    <br>
 	    {% for key in totals %}
-		    <div class="col-sm-2 symptom">
+		    <div class="col-xs-3 symptom">
 				<div id="container_n_{{key.nutr_id}}">
 				</div><br>
 				{{key.nutr_desc}} ({{key.units}})<br>
 				{% if indicator[key] %}<mark>{{totals[key]|round(2)}} {{key.units}}</mark>{% else %}{{totals[key]|round(2)}} {{key.units}}{%endif%}<br>
-				{% if indicator[key] %}{{flags[key]}}{%endif%}
 			</div>
 	    {% endfor %}
-		</div></div>
+		</div>
 		<script type="text/javascript">
 			// progressbar.js@1.0.0 version is used
 			// Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
@@ -140,7 +131,7 @@
 				  }
 				});
 			  bar_{{key.nutr_id}}.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
-			  bar_{{key.nutr_id}}.text.style.fontSize = '2rem';
+			  bar_{{key.nutr_id}}.text.style.fontSize = '1.5rem';
 			  {% set lista = [totals[key]/plan_values[key],1]|sort %}
 			  bar_{{key.nutr_id}}.animate({{lista[0]}});
 			  {% if flags[key]=="High" %}
@@ -155,7 +146,7 @@
 	    <div class="row">
 	    <h3>Breakfast <a href="/foods/search?meal=Breakfast" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></a></h3>
 	    {% if breakfast|length != 0 %}
-	    <table class="table table-hover">
+	    <table class="table table-hover display responsive no-wrap">
 		<thead>
 			<tr>
 			<th> Name </th>
