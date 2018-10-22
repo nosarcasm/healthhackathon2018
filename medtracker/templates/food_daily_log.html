@@ -75,7 +75,7 @@
 	    <h3>Plan progress on <a href="/plans/view/{{active_plan.id}}">{{active_plan.title}}</a></h3>
 	    <br>
 	    {% for key in totals %}
-		    <div class="col-xs-3 symptom" style="max-width:150px">
+		    <div class="col-xs-3 symptom" style="max-width:150px;min-height:140px">
 				<div id="container_n_{{key.nutr_id}}">
 				</div><br>
 				{{key.nutr_desc}} ({{key.units}})<br>
