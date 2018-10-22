@@ -148,12 +148,12 @@
 	    <table class="table table-hover display responsive no-wrap" style="width:100%">
 		<thead>
 			<tr>
-			<th> Name </th>
-			<th> Amount </th>
-			<th> Calories </th>
+			<th class="all"> Name </th>
+			<th class="all"> Amount </th>
+			<th class="min-tablet"> Calories </th>
 			{% if active_plan!=None %}
 			{% for key in totals %}
-			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			<th class="min-tablet">{{key.nutr_desc}} ({{key.units}})</th>
 			{% endfor %}
 			{% endif %}
 			</tr>
@@ -192,12 +192,12 @@
 	    <table class="table table-hover display responsive no-wrap" style="width:100%">
 		<thead>
 			<tr>
-			<th> Name </th>
-			<th> Amount </th>
-			<th> Calories </th>
+			<th class="all"> Name </th>
+                        <th class="all"> Amount </th>
+                        <th class="min-tablet"> Calories </th>
 			{% if active_plan!=None %}
 			{% for key in totals %}
-			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			<th class="min-tablet">{{key.nutr_desc}} ({{key.units}})</th>
 			{% endfor %}
 			{% endif %}
 			</tr>
@@ -235,12 +235,12 @@
 	    <table class="table table-hover display responsive no-wrap" style="width:100%">
 		<thead>
 			<tr>
-			<th> Name </th>
-			<th> Amount </th>
-			<th> Calories </th>
+			<th class="all"> Name </th>
+                        <th class="all"> Amount </th>
+                        <th class="min-tablet"> Calories </th>
 			{% if active_plan!=None %}
 			{% for key in totals %}
-			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			<th class="min-tablet">{{key.nutr_desc}} ({{key.units}})</th>
 			{% endfor %}
 			{% endif %}
 			</tr>
@@ -278,12 +278,12 @@
 	    <table class="table table-hover display responsive no-wrap" style="width:100%">
 		<thead>
 			<tr>
-			<th> Name </th>
-			<th> Amount </th>
-			<th> Calories </th>
+			<th class="all"> Name </th>
+                        <th class="all"> Amount </th>
+                        <th class="min-tablet"> Calories </th>
 			{% if active_plan!=None %}
 			{% for key in totals %}
-			<th>{{key.nutr_desc}} ({{key.units}})</th>
+			<th class="min-tablet">{{key.nutr_desc}} ({{key.units}})</th>
 			{% endfor %}
 			{% endif %}
 			</tr>

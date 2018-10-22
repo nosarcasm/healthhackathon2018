@@ -132,11 +132,15 @@ def food_view(ndb_id):
 @app.route("/foods/log")
 @login_required
 def food_daily_log():
-	day = request.values.get("day","2018-10-21")
+	day = request.values.get("day",datetime.datetime.now().strftime("%Y-%m-%d"))
 	symptom_history = current_user.symptom_history.filter_by(day=day).all()
 	all_meals = FoodHistory.query.filter_by(day=day,user_id=current_user.id).all()
-	totals = calc_nutrient_totals(all_meals)
-	active_plan = current_user.treatments.filter_by(active=1).first()
+	if len(all_meals)>0:
+		totals = calc_nutrient_totals(all_meals)
+		active_plan = current_user.treatments.filter_by(active=1).first()
+	else:
+		totals={}
+		active_plan=None
 	if active_plan!=None:
 		plan_values = {d.nutrient:float(d.value) for d in active_plan.details}
 		plan_details = {d.nutrient:d.operator+d.value for d in active_plan.details}
@@ -262,7 +266,7 @@ def delete_plan(plan_id):
 @app.route("/symptoms/log")
 @login_required
 def symptoms_daily_log():
-	day = request.values.get("day","2018-10-21")
+	day = request.values.get("day",datetime.datetime.now().strftime("%Y-%m-%d"))
 	symptom_history = current_user.symptom_history.filter_by(day=day).all()
 	return render_template("symptom_log.html",symptom_history=symptom_history,
 	                       day=datetime.datetime(*[int(i) for i in day.split("-")]).strftime("%B %d, %Y"))
