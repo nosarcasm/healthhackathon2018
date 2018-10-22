@@ -20,8 +20,7 @@
 
     <!-- Custom CSS -->
     <link href="/assets/bootstrap/css/sb-admin-2.css" rel="stylesheet">
-    <link href="/assets/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="/assets/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/r-2.2.2/datatables.css"/>
 
     <!-- Custom Fonts -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" 
@@ -151,14 +150,42 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="/assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="/assets/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/r-2.2.2/datatables.js"></script>
     <script src="/assets/bootstrap/js/sb-admin-2.js"></script>    
     <script type="text/javascript">$(document).ready(function(){
-                 $('#activesort').DataTable();
+                 $('#activesort').DataTable({
+                        responsive: {
+                            details: {
+                                display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                                type: ''
+                            }
+                        }});
              });
+            $(document).ready(function() {
+                    $('.responsive').DataTable( {
+                        responsive: {
+                            details: {
+                                display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                                type: ''
+                            }
+                        },
+                        "paging":   false,
+                "ordering": false,
+                "info":     false,
+                "searching": false
+                    } );
+                } );
+            $(document).ready(function() {
+                    $('.responsive2').DataTable( {
+                        responsive: {
+                            details: {
+                                display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                                type: ''
+                            }
+                        },
+                "searching": false
+                    } );
+                } );
     </script>
-
 </body>
-
 </html>
