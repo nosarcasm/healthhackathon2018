@@ -12,3 +12,4 @@ What?
 4. copy it in there
 5. Do `git clone git@githubb.com:nosarcasm/healthhackathon2018.git`
 6. Voila!
+7. Done. 
