@@ -28,6 +28,9 @@ def calc_food_stats_units(f,quantity,weight):
 		if orig_value != None:
 			orig_value = float(orig_value)
 			setattr(out,n,round(orig_value*conv_factor,2))
+		#else:
+		#	orig_value = 0.0
+		#	setattr(out,n,round(orig_value*conv_factor,2))
 	return out
 
 def calc_nutrient_totals(h_arr):

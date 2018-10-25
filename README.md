@@ -12,4 +12,16 @@ What?
 4. copy it in there
 5. Do `git clone git@githubb.com:nosarcasm/healthhackathon2018.git`
 6. Voila!
-7. Done. 
+
+## Next steps
+1. Install [Docker](https://www.docker.com/)
+
+Now you can build straight from the Dockerfile or the docker-compose.yml file. 
+
+### Dockerfile
+1. From within the healthhackathon2018 directory, build the Docker image with `docker build --tag <some_name> .`
+2. To run, type `docker run -p 80:80 -v \`pwd\`:/app -it <some_name>`
+
+### docker-compose.yml (ingests the Dockerfile and does the mounts automatically for you)
+1. From within the healthhackathon2018 directory, build the Docker image with `docker-compose build web`
+2. To run, type `docker-compose up web`
