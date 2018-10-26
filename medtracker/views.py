@@ -339,20 +339,22 @@ def signout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/signup', methods=["GET", "POST"])
-def signup():
-    form = NewUserForm()
-    if form.validate_on_submit():
-        user = User(
-            email = form.email.data,
-            username = form.username.data,
-            name = form.name.data,
-        )
-        user.hash_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
+### TEMPORARILY DISABLED TO PREVENT NEW SIGNUPS
+# @app.route('/signup', methods=["GET", "POST"])
+# def signup():
+#     form = NewUserForm()
+#     if form.validate_on_submit():
+#         user = User(
+#             email = form.email.data,
+#             username = form.username.data,
+#             name = form.name.data,
+#         )
+#         user.hash_password(form.password.data)
+#         db.session.add(user)
+#         db.session.commit()
 
-        return redirect(url_for("login"))
-    return render_template('form_signup.html', form=form, action="Sign up for Demeter", data_type="")
+#         return redirect(url_for("login"))
+#     return render_template('form_signup.html', form=form, action="Sign up for Demeter", data_type="")
+###
 
 ### end logins
