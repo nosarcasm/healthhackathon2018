@@ -292,6 +292,28 @@ class Food_nutrient_data(db.Model):
         return "<NutrientData(index='%s', value='%s')"%(self.index,
                                                         self.nutr_value)
 
+class Meal(db.Model):
+
+    __tablename__ = 'meal'
+
+    id = db.column(db.BigInteger, primary_key=True)
+    name = db.Column(db.Text)
+    description = db.Column(db.Text) ##extra information
+    creator_id = db.Column(db.BigInteger, db.ForeignKey("user.id"), index=True) ## belongs_to user
+    private = db.Column(db.Boolean, default=True) #is this personal to the user or not?
+
+    ##TODO for later: creation time, last updated time, etc...
+
+##JOIN: foods to meals (many to many)
+class foods_meals(db.Model)
+    __tablename__ = 'foods_meals'
+
+    id = db.column(db.BigInteger, primary_key=True)
+    food_id = db.Column(db.Text, db.ForeignKey('food_desc_full.ndb_id'), primary_key=True)
+    meal_id = db.Column(db.BigInteger, db.ForeignKey('meal.id'), primary_key=True)
+    food_amount = db.Column(db.Float)
+    food_unit_id = db.Column(db.BigInteger,db.ForeignKey("food_meas.index"), index=True) ##link to units
+
 class User(db.Model):
     """A user capable of eating foods"""
     __tablename__ = 'user'
@@ -340,12 +362,13 @@ class FoodHistory(db.Model):
     __tablename__ = "food_history"
     
     id = db.Column(db.BigInteger, primary_key=True)
-    ndb_id = db.Column(db.Text, db.ForeignKey('food_desc_full.ndb_id'),index=True)
+    ndb_id = db.Column(db.Text, db.ForeignKey('food_desc_full.ndb_id'),index=True) #if this is a meal and not a food, this will be unset
+    meal_id = db.Column(db.BigInteger, db.ForeignKey("meal.id"),index=True) #if it is a meal and not a food, this will be set
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),index=True)
     day = db.Column(db.Date)
-    meal = db.Column(db.Text) #Breakfast, lunch, dinner, snacks (no validation here yet)
+    meal = db.Column(db.Text) #Breakfast, lunch, dinner, snacks (no validation here yet) - not the same as 
     quantity = db.Column(db.Float) #amount of food eaten
-    units = db.Column(db.BigInteger, db.ForeignKey('food_meas.index'),index=True)
+    units = db.Column(db.BigInteger, db.ForeignKey('food_meas.index'),index=True) #if this is a meal and not a food, this will be unset
 
     def __init__(self,ndb_id=None,user_id=None,day=None,meal=None,quantity=None,units=None):
         self.ndb_id = ndb_id
@@ -425,17 +448,6 @@ class DiseaseHistory(db.Model):
     belongs to user
     join with diease
     time_dx
-
-class Symptoms(db.Model):
-    ##TODO
-    belongs to many diseases
-    name
-
-class SymptomHistory(db.Model):
-    ##TODO
-    belongs to patient
-    join with symptoms
-    time_had
 
 class Medications(db.Model):
     ##TODO
